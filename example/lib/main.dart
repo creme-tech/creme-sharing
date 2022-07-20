@@ -31,6 +31,14 @@ class _MyAppState extends State<MyApp> {
     // Platform messages may fail, so we use a try/catch PlatformException.
     // We also handle the message potentially returning null.
     try {
+      _cremeSharingPlugin.shareToInstagramStories(
+        backgroundImage:
+            'https://images.ctfassets.net/4kdyp3e5mlne/2n7azZ2QJjY5f937HtdZQL/10d6e5de71721348185ac4df0973e1d4/Marie.jpg',
+        backgroundTopColor: Colors.red,
+        backgroundBottomColor: Colors.orange,
+        stickerImage:
+            'https://images.ctfassets.net/4kdyp3e5mlne/1XGsZB6hhvceAFM241dqGW/1fad3eab1a652a5276b5e0f55afea5e8/ThaiBasilGuacamoleImage.png',
+      );
       platformVersion = 'Unknown platform version';
     } on PlatformException {
       platformVersion = 'Failed to get platform version.';
