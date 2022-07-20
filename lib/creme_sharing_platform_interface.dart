@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 import 'creme_sharing_method_channel.dart';
@@ -14,7 +16,7 @@ abstract class CremeSharingPlatform extends PlatformInterface {
   ///
   /// Defaults to [MethodChannelCremeSharing].
   static CremeSharingPlatform get instance => _instance;
-  
+
   /// Platform-specific implementations should set this with their own
   /// platform-specific class that extends [CremeSharingPlatform] when
   /// they register themselves.
@@ -23,7 +25,14 @@ abstract class CremeSharingPlatform extends PlatformInterface {
     _instance = instance;
   }
 
-  Future<String?> getPlatformVersion() {
+  Future<void> shareToInstagramStories({
+    Color? backgroundTopColor,
+    Color? backgroundBottomColor,
+    String? stickerImage,
+    String? backgroundVideo,
+    String? backgroundImage,
+    String? contentURL,
+  }) {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
 }
