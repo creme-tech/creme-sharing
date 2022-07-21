@@ -11,6 +11,8 @@ dependencies:
   flutter:
     sdk: flutter
   plugin_platform_interface: ^2.0.2
+  screenshot: ^1.2.3
+  flutter_svg: ^1.1.1+1
 
 dev_dependencies:
   flutter_test:
@@ -39,6 +41,19 @@ flutter:
         pluginClass: CremeSharingPlugin
       ios:
         pluginClass: CremeSharingPlugin
+
+  assets:
+    - lib/assets/svg/
+
+  fonts:
+    - family: Inter
+      fonts:
+        - asset: lib/assets/fonts/Inter-Regular.ttf
+        - asset: lib/assets/fonts/Inter-SemiBold.ttf
+          weight: 600
+    - family: Handwritten
+      fonts:
+        - asset: lib/assets/fonts/Handwritten.otf
 
   # To add assets to your plugin package, add an assets section, like this:
   # assets:
