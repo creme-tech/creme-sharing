@@ -22,15 +22,21 @@ class MethodChannelCremeSharing extends CremeSharingPlatform {
     String? contentURL,
   }) async {
     if (Platform.isIOS) {
-      return await methodChannel.invokeMethod('shareToInstagramStories', {
-        'backgroundTopColor': '#${backgroundTopColor?.value.toRadixString(16)}',
-        'backgroundBottomColor':
-            '#${backgroundBottomColor?.value.toRadixString(16)}',
-        'stickerImage': stickerImage,
-        'backgroundVideo': backgroundVideo,
-        'backgroundImage': backgroundImage,
-        'contentURL': contentURL,
-      });
+      return await methodChannel.invokeMethod(
+        'shareToInstagramStories',
+        {
+          'backgroundTopColor': backgroundTopColor != null
+              ? '#${(backgroundTopColor.value & 0xFFFFFF).toRadixString(16).padLeft(6, '0').toUpperCase()}'
+              : null,
+          'backgroundBottomColor': backgroundBottomColor != null
+              ? '#${(backgroundBottomColor.value & 0xFFFFFF).toRadixString(16).padLeft(6, '0').toUpperCase()}'
+              : null,
+          'stickerImage': stickerImage,
+          'backgroundVideo': backgroundVideo,
+          'backgroundImage': backgroundImage,
+          'contentURL': contentURL,
+        },
+      );
     }
     return super.shareToInstagramStories(
       contentURL: contentURL,
