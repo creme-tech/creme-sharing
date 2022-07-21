@@ -60,6 +60,9 @@ public class SwiftCremeSharingPlugin: NSObject, FlutterPlugin {
         if url.isFileURL {
             return UIImage(contentsOfFile: source)?.pngData()
         }
+        if let dataDecoded = Data(base64Encoded: source) {
+            return UIImage(data: dataDecoded)?.pngData()
+        }
         guard let data = try? Data(contentsOf: url) else { return nil }
         return UIImage(data: data)?.pngData()
     }
