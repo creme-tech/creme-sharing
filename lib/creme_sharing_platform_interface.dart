@@ -25,6 +25,10 @@ abstract class CremeSharingPlatform extends PlatformInterface {
     _instance = instance;
   }
 
+  Future<bool> instagramIsAvailableToShare() {
+    throw UnimplementedError('platformVersion() has not been implemented.');
+  }
+
   Future<void> shareToInstagramStories({
     Color? backgroundTopColor,
     Color? backgroundBottomColor,

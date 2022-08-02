@@ -10,6 +10,17 @@ public class SwiftCremeSharingPlugin: NSObject, FlutterPlugin {
 
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
       switch (call.method){
+        case "instagramIsAvailableToShare":
+          if let storiesUrl = URL(string: "instagram-stories://share") {
+              if UIApplication.shared.canOpenURL(storiesUrl) {
+                  if #available(iOS 10.0, *) {
+                    return result(true)
+                  }
+                  return result(false)
+              } else {
+                  return result(false)
+              }
+          }
         case "shareToInstagramStories":
           if let storiesUrl = URL(string: "instagram-stories://share") {
               if UIApplication.shared.canOpenURL(storiesUrl) {
@@ -45,11 +56,11 @@ public class SwiftCremeSharingPlugin: NSObject, FlutterPlugin {
                       ]
                       UIPasteboard.general.setItems([pasteboardItems], options: pasteboardOptions)
                       UIApplication.shared.open(storiesUrl, options: [:], completionHandler: nil)
-                      return result("User have instagram on their device.")
+                    return result(nil)
                   }
-                  return result("work only in IOS 10.0 or newer")
+                  return result(nil)
               } else {
-                  result("User doesn't have instagram on their device.")
+                  return result(nil)
               }
           }
         default:

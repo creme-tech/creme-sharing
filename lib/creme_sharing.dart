@@ -24,6 +24,26 @@ class CremeSharing {
     _httpClient.close(force: true);
   }
 
+  /// This method will check is the user have the Instagram available to share
+  Future<bool> instagramIsAvailableToShare({
+    Color? backgroundTopColor,
+    Color? backgroundBottomColor,
+    String? stickerImage,
+    String? backgroundVideo,
+    String? backgroundImage,
+    String? contentURL,
+  }) =>
+      CremeSharingPlatform.instance.instagramIsAvailableToShare();
+
+  /// All the arguments are the same of the documentation in https://developers.facebook.com/docs/sharing/sharing-to-stories
+  /// but in the IOS side you can:
+  /// - [backgroundTopColor] : will be transformed to a String in hex color
+  /// - [backgroundBottomColor] : will be transformed to a String in hex color
+  /// - [stickerImage] : will be transformed to an image if the value be a URL or an image encoded 64 as String
+  /// - [backgroundImage] : will be transformed to an image if the value be an URL or an image encoded 64 as String
+  /// - [backgroundVideo] : will be transformed to an image if the value be an URL
+  /// - [contentURL] : it will be a string (that don't work because the app need to be a partner of Instagram)
+  /// but in the Android will be implemented (WIP)
   Future<void> shareToInstagramStories({
     Color? backgroundTopColor,
     Color? backgroundBottomColor,
@@ -31,16 +51,15 @@ class CremeSharing {
     String? backgroundVideo,
     String? backgroundImage,
     String? contentURL,
-  }) {
-    return CremeSharingPlatform.instance.shareToInstagramStories(
-      backgroundTopColor: backgroundTopColor,
-      backgroundBottomColor: backgroundBottomColor,
-      stickerImage: stickerImage,
-      backgroundVideo: backgroundVideo,
-      backgroundImage: backgroundImage,
-      contentURL: contentURL,
-    );
-  }
+  }) =>
+      CremeSharingPlatform.instance.shareToInstagramStories(
+        backgroundTopColor: backgroundTopColor,
+        backgroundBottomColor: backgroundBottomColor,
+        stickerImage: stickerImage,
+        backgroundVideo: backgroundVideo,
+        backgroundImage: backgroundImage,
+        contentURL: contentURL,
+      );
 
   /// This method should be used to share some creator to Instagram stories
   /// and the mockup can be found on: https://www.figma.com/file/r5ox3y5gRNFXPDb1KcsQS3/CREME-2022?node-id=2316%3A217770
