@@ -37,7 +37,6 @@ public class SwiftCremeSharingPlugin: NSObject, FlutterPlugin {
                       pasteboardItems["com.instagram.sharedSticker.backgroundImage"] = backgroundImageData
                   }
                   if let backgroundVideo = getVideoData(source: backgroundVideo) {
-                      print(backgroundVideo)
                       pasteboardItems["com.instagram.sharedSticker.backgroundVideo"] = backgroundVideo
                   }
                   if #available(iOS 10.0, *) {
@@ -73,11 +72,8 @@ public class SwiftCremeSharingPlugin: NSObject, FlutterPlugin {
     
     private func getVideoData(source: String?) -> NSData? {
         guard let source = source else { return nil }
-        print(source)
         guard let url = NSURL(string: source) else { return nil }
-        print(source)
         guard let urlData = NSData(contentsOf: url as URL) else { return nil }
-        print(urlData)
         return urlData
     }
 }
