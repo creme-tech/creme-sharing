@@ -36,6 +36,10 @@ public class SwiftCremeSharingPlugin: NSObject, FlutterPlugin {
                   if let backgroundImageData = getImageData(source: backgroundImage) {
                       pasteboardItems["com.instagram.sharedSticker.backgroundImage"] = backgroundImageData
                   }
+                  if let backgroundVideo = getVideoData(source: backgroundVideo) {
+                      print(backgroundVideo)
+                      pasteboardItems["com.instagram.sharedSticker.backgroundVideo"] = backgroundVideo
+                  }
                   if #available(iOS 10.0, *) {
                       let pasteboardOptions = [
                         UIPasteboard.OptionsKey.expirationDate: Date().addingTimeInterval(300)
@@ -66,4 +70,19 @@ public class SwiftCremeSharingPlugin: NSObject, FlutterPlugin {
         guard let data = try? Data(contentsOf: url) else { return nil }
         return UIImage(data: data)?.pngData()
     }
+    
+    private func getVideoData(source: String?) -> NSData? {
+        guard let source = source else { return nil }
+        print(source)
+        guard let url = NSURL(string: source) else { return nil }
+        print(source)
+        guard let urlData = NSData(contentsOf: url as URL) else { return nil }
+        print(urlData)
+        return urlData
+    }
 }
+
+
+
+
+
