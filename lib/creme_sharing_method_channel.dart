@@ -13,6 +13,18 @@ class MethodChannelCremeSharing extends CremeSharingPlatform {
   final methodChannel = const MethodChannel('creme_sharing');
 
   @override
+  Future<bool> instagramIsAvailableToShare() async {
+    if (Platform.isIOS) {
+      return (await methodChannel
+              .invokeMethod<bool>('instagramIsAvailableToShare') ??
+          false);
+    }
+
+    /// TODO: implement Android
+    return super.instagramIsAvailableToShare();
+  }
+
+  @override
   Future<void> shareToInstagramStories({
     Color? backgroundTopColor,
     Color? backgroundBottomColor,
@@ -38,6 +50,8 @@ class MethodChannelCremeSharing extends CremeSharingPlatform {
         },
       );
     }
+
+    /// TODO: implement Android
     return super.shareToInstagramStories(
       contentURL: contentURL,
       backgroundTopColor: backgroundTopColor,
