@@ -16,7 +16,6 @@ dependencies:
       url: https://github.com/SachinGanesh/screenshot.git
       ref: "df14c5ccd52fcb5ccb568a0043419c9850438257"
   flutter_svg: ^1.1.1+1
-  path_provider: ^2.0.11
 
 dev_dependencies:
   flutter_test:

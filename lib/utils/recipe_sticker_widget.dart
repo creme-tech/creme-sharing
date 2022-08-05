@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -8,9 +8,9 @@ import 'package:creme_sharing/assets/fonts/app_fonts.dart';
 import 'package:creme_sharing/assets/svg/app_svg.dart';
 
 class RecipeStickerWidget extends StatelessWidget {
-  final File? imageBackgroundFile;
-  final File creatorAvatarFile;
-  final File recipeImageFile;
+  final Uint8List? imageBackgroundImageBytes;
+  final Uint8List creatorAvatarImageBytes;
+  final Uint8List recipeImageImageBytes;
   final Size extraRecipesImageSize;
   final String creatorName;
   final String recipeName;
@@ -26,11 +26,11 @@ class RecipeStickerWidget extends StatelessWidget {
 
   const RecipeStickerWidget({
     Key? key,
-    required this.recipeImageFile,
+    required this.recipeImageImageBytes,
     required this.extraRecipesImageSize,
     required this.textScaleFactor,
-    required this.creatorAvatarFile,
-    required this.imageBackgroundFile,
+    required this.creatorAvatarImageBytes,
+    required this.imageBackgroundImageBytes,
     required this.creatorName,
     required this.recipeName,
     required this.cremeLogoMessage,
@@ -52,12 +52,12 @@ class RecipeStickerWidget extends StatelessWidget {
           : backgroundColor ?? Colors.transparent,
       child: Stack(
         children: [
-          if (!hasVideoOnBackground && imageBackgroundFile != null)
+          if (!hasVideoOnBackground && imageBackgroundImageBytes != null)
             Positioned.fill(
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(24),
-                child: Image.file(
-                  imageBackgroundFile!,
+                child: Image.memory(
+                  imageBackgroundImageBytes!,
                   fit: BoxFit.cover,
                   height: imageBackgroundSize.height,
                   width: imageBackgroundSize.width,
@@ -65,7 +65,7 @@ class RecipeStickerWidget extends StatelessWidget {
                 ),
               ),
             ),
-          if (!hasVideoOnBackground && imageBackgroundFile != null)
+          if (!hasVideoOnBackground && imageBackgroundImageBytes != null)
             Positioned.fill(
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(24),
@@ -103,8 +103,8 @@ class RecipeStickerWidget extends StatelessWidget {
                           width: recipeImageSize.width,
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(16),
-                            child: Image.file(
-                              recipeImageFile,
+                            child: Image.memory(
+                              recipeImageImageBytes,
                               height: recipeImageSize.height,
                               width: recipeImageSize.width,
                               fit: BoxFit.cover,
@@ -128,8 +128,8 @@ class RecipeStickerWidget extends StatelessWidget {
                                   width: extraRecipesImageSize.width,
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(16),
-                                    child: Image.file(
-                                      extraRecipesToShow[0].recipeImageFile!,
+                                    child: Image.memory(
+                                      extraRecipesToShow[0].recipeImageBytes!,
                                       height: extraRecipesImageSize.height,
                                       width: extraRecipesImageSize.width,
                                       fit: BoxFit.cover,
@@ -145,8 +145,8 @@ class RecipeStickerWidget extends StatelessWidget {
                                   width: extraRecipesImageSize.width,
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(16),
-                                    child: Image.file(
-                                      extraRecipesToShow[1].recipeImageFile!,
+                                    child: Image.memory(
+                                      extraRecipesToShow[1].recipeImageBytes!,
                                       height: extraRecipesImageSize.height,
                                       width: extraRecipesImageSize.width,
                                       fit: BoxFit.cover,
@@ -162,8 +162,8 @@ class RecipeStickerWidget extends StatelessWidget {
                                   width: recipeImageSize.width,
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(16),
-                                    child: Image.file(
-                                      recipeImageFile,
+                                    child: Image.memory(
+                                      recipeImageImageBytes,
                                       height: recipeImageSize.height,
                                       width: recipeImageSize.width,
                                       fit: BoxFit.cover,
@@ -180,8 +180,8 @@ class RecipeStickerWidget extends StatelessWidget {
                         height: creatorAvatarSize.height,
                         width: creatorAvatarSize.width,
                         child: ClipOval(
-                          child: Image.file(
-                            creatorAvatarFile,
+                          child: Image.memory(
+                            creatorAvatarImageBytes,
                             height: creatorAvatarSize.height,
                             width: creatorAvatarSize.width,
                             fit: BoxFit.cover,
@@ -247,23 +247,23 @@ class RecipeStickerWidget extends StatelessWidget {
 class RecipeData {
   final String recipeName;
   final String recipeImageUrl;
-  final File? recipeImageFile;
+  final Uint8List? recipeImageBytes;
 
   const RecipeData({
     required this.recipeName,
     required this.recipeImageUrl,
-    required this.recipeImageFile,
+    required this.recipeImageBytes,
   });
 
   RecipeData copyWith({
     String? recipeName,
     String? recipeImageUrl,
-    File? recipeImageFile,
+    Uint8List? recipeImageBytes,
   }) {
     return RecipeData(
       recipeName: recipeName ?? this.recipeName,
       recipeImageUrl: recipeImageUrl ?? this.recipeImageUrl,
-      recipeImageFile: recipeImageFile ?? this.recipeImageFile,
+      recipeImageBytes: recipeImageBytes ?? this.recipeImageBytes,
     );
   }
 }
