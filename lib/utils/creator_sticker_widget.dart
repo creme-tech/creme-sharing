@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -8,8 +8,8 @@ import 'package:creme_sharing/assets/fonts/app_fonts.dart';
 import 'package:creme_sharing/assets/svg/app_svg.dart';
 
 class CreatorStickerWidget extends StatelessWidget {
-  final File? imageBackgroundFile;
-  final File creatorAvatarFile;
+  final Uint8List? imageBackgroundImageBytes;
+  final Uint8List creatorAvatarImageBytes;
   final Size extraRecipesImageSize;
   final String creatorName;
   final String cremeLogoMessage;
@@ -25,8 +25,8 @@ class CreatorStickerWidget extends StatelessWidget {
     Key? key,
     required this.extraRecipesImageSize,
     required this.textScaleFactor,
-    required this.creatorAvatarFile,
-    required this.imageBackgroundFile,
+    required this.creatorAvatarImageBytes,
+    required this.imageBackgroundImageBytes,
     required this.creatorName,
     required this.cremeLogoMessage,
     required this.backgroundColor,
@@ -46,12 +46,12 @@ class CreatorStickerWidget extends StatelessWidget {
           : backgroundColor ?? Colors.transparent,
       child: Stack(
         children: [
-          if (!hasVideoOnBackground && imageBackgroundFile != null)
+          if (!hasVideoOnBackground && imageBackgroundImageBytes != null)
             Positioned.fill(
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(24),
-                child: Image.file(
-                  imageBackgroundFile!,
+                child: Image.memory(
+                  imageBackgroundImageBytes!,
                   fit: BoxFit.cover,
                   height: imageBackgroundSize.height,
                   width: imageBackgroundSize.width,
@@ -59,7 +59,7 @@ class CreatorStickerWidget extends StatelessWidget {
                 ),
               ),
             ),
-          if (!hasVideoOnBackground && imageBackgroundFile != null)
+          if (!hasVideoOnBackground && imageBackgroundImageBytes != null)
             Positioned.fill(
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(24),
@@ -91,8 +91,8 @@ class CreatorStickerWidget extends StatelessWidget {
                     height: creatorAvatarSize.height,
                     width: creatorAvatarSize.width,
                     child: ClipOval(
-                      child: Image.file(
-                        creatorAvatarFile,
+                      child: Image.memory(
+                        creatorAvatarImageBytes,
                         height: creatorAvatarSize.height,
                         width: creatorAvatarSize.width,
                         fit: BoxFit.cover,

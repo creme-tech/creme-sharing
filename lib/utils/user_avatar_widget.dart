@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 
@@ -6,17 +6,17 @@ import 'package:creme_sharing/assets/fonts/app_fonts.dart';
 import 'package:creme_sharing/assets/colors/app_colors.dart';
 
 class UserAvatarWidget extends StatelessWidget {
-  final File? avatarFile;
+  final Uint8List? avatarImageBytes;
   final String name;
   final Size avatarSize;
   final TextStyle? letterTextStyle;
 
   const UserAvatarWidget({
     Key? key,
-    required this.avatarFile,
     required this.name,
     required this.avatarSize,
     required this.letterTextStyle,
+    required this.avatarImageBytes,
   }) : super(key: key);
 
   @override
@@ -50,11 +50,11 @@ class UserAvatarWidget extends StatelessWidget {
                 shape: BoxShape.circle,
               ),
             ),
-            if (avatarFile != null)
+            if (avatarImageBytes != null)
               Align(
                 alignment: Alignment.center,
-                child: Image.file(
-                  avatarFile!,
+                child: Image.memory(
+                  avatarImageBytes!,
                   fit: BoxFit.cover,
                   filterQuality: FilterQuality.high,
                   height: avatarSize.height,
@@ -63,7 +63,7 @@ class UserAvatarWidget extends StatelessWidget {
                   errorBuilder: (_, __, ___) => avatarWithoutUrl,
                 ),
               ),
-            if (avatarFile == null)
+            if (avatarImageBytes == null)
               Align(
                 alignment: Alignment.center,
                 child: avatarWithoutUrl,

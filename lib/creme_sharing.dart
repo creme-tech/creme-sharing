@@ -1,15 +1,15 @@
 import 'dart:math';
 import 'dart:convert';
-import 'dart:io' show HttpClient, File;
+import 'dart:io' show HttpClient;
+import 'dart:typed_data';
 
+import 'package:creme_sharing/utils/cooked_sticker_widget.dart';
+import 'package:creme_sharing/utils/creator_sticker_widget.dart';
 import 'package:flutter/foundation.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:flutter/material.dart';
 
-import 'package:creme_sharing/utils/creator_sticker_widget.dart';
 import 'package:creme_sharing/creme_sharing_platform_interface.dart';
-import 'package:creme_sharing/utils/cooked_sticker_widget.dart';
 import 'package:creme_sharing/utils/recipe_sticker_widget.dart';
 
 class CremeSharing {
@@ -25,14 +25,7 @@ class CremeSharing {
   }
 
   /// This method will check is the user have the Instagram available to share
-  Future<bool> instagramIsAvailableToShare({
-    Color? backgroundTopColor,
-    Color? backgroundBottomColor,
-    String? stickerImage,
-    String? backgroundVideo,
-    String? backgroundImage,
-    String? contentURL,
-  }) =>
+  Future<bool> instagramIsAvailableToShare() =>
       CremeSharingPlatform.instance.instagramIsAvailableToShare();
 
   /// All the arguments are the same of the documentation in https://developers.facebook.com/docs/sharing/sharing-to-stories
@@ -92,24 +85,19 @@ class CremeSharing {
     final creatorAvatarUrlToDownload = '$creatorAvatarUrl'
         '?w=${(devicePixelRatio * avatarSize.width).round()}'
         '&h=${(devicePixelRatio * avatarSize.width).round()}';
-    final files = await Future.wait([
-      _downloadFile(
-        url: creatorAvatarUrlToDownload,
-        filename: 'creator_avatar.png',
-      ),
+    final imageBytes = await Future.wait([
+      _downloadImage(url: creatorAvatarUrlToDownload),
       if (!hasVideoOnBackground)
-        _downloadFile(
-          url: imageBackgroundUrlToDownload,
-          filename: 'image_background.png',
-        ),
+        _downloadImage(url: imageBackgroundUrlToDownload),
     ]);
     final stickerImagePngBytes = await _screenshotController.captureFromWidget(
       CreatorStickerWidget(
         extraRecipesImageSize: extraRecipesImageSize,
         textScaleFactor: textScaleFactor,
         hasVideoOnBackground: hasVideoOnBackground,
-        creatorAvatarFile: files[0]!,
-        imageBackgroundFile: files.length >= 2 ? files.last : null,
+        creatorAvatarImageBytes: imageBytes[0]!,
+        imageBackgroundImageBytes:
+            imageBytes.length >= 2 ? imageBytes.last : null,
         imageBackgroundSize: imageBackgroundSize,
         creatorAvatarSize: avatarSize,
         creatorTag: creatorTag,
@@ -121,24 +109,16 @@ class CremeSharing {
       pixelRatio: devicePixelRatio,
       context: context,
     );
-    await Future.wait([
-      ...files.map<Future>((file) async {
-        final exists = (await file?.exists()) ?? false;
-        if (exists) {
-          await file?.delete();
-        }
-      }).toList(),
-      shareToInstagramStories(
-        backgroundImage:
-            hasVideoOnBackground ? null : base64Encode(stickerImagePngBytes),
-        stickerImage:
-            hasVideoOnBackground ? base64Encode(stickerImagePngBytes) : null,
-        backgroundTopColor: backgroundColor,
-        backgroundBottomColor: backgroundColor,
-        contentURL: contentURL,
-        backgroundVideo: backgroundVideoUrl,
-      ),
-    ]);
+    await shareToInstagramStories(
+      backgroundImage:
+          hasVideoOnBackground ? null : base64Encode(stickerImagePngBytes),
+      stickerImage:
+          hasVideoOnBackground ? base64Encode(stickerImagePngBytes) : null,
+      backgroundTopColor: backgroundColor,
+      backgroundBottomColor: backgroundColor,
+      contentURL: contentURL,
+      backgroundVideo: backgroundVideoUrl,
+    );
   }
 
   /// This method should be used to share some recipe to Instagram stories
@@ -184,34 +164,23 @@ class CremeSharing {
     final recipeImageUrlToDownload = '$recipeImageUrl'
         '?w=${(devicePixelRatio * recipeImageSize.width).round()}'
         '&h=${(devicePixelRatio * recipeImageSize.width).round()}';
-    final files = await Future.wait([
-      _downloadFile(
-        url: creatorAvatarUrlToDownload,
-        filename: 'creator_avatar.png',
-      ),
-      _downloadFile(
-        url: recipeImageUrlToDownload,
-        filename: 'recipe_image.png',
-      ),
+    final imageBytes = await Future.wait([
+      _downloadImage(url: creatorAvatarUrlToDownload),
+      _downloadImage(url: recipeImageUrlToDownload),
       if (!hasVideoOnBackground)
-        _downloadFile(
-          url: imageBackgroundUrlToDownload,
-          filename: 'image_background.png',
-        ),
+        _downloadImage(url: imageBackgroundUrlToDownload),
       ...List.of(extraRecipesToShow)
           .take(2)
-          .map<Future>((recipeData) => _downloadFile(
+          .map<Future>((recipeData) => _downloadImage(
                 url: '${recipeData.recipeImageUrl}'
                     '?w=${(devicePixelRatio * extraRecipesImageSize.width).round()}'
                     '&h=${(devicePixelRatio * extraRecipesImageSize.width).round()}',
-                filename:
-                    '${recipeData.recipeName.trim().toLowerCase().replaceAll(' ', '_')}.png',
               ).then(
                 (value) {
                   if (value != null) {
                     final index = extraRecipesToShow.indexOf(recipeData);
                     extraRecipesToShow[index] = extraRecipesToShow[index]
-                        .copyWith(recipeImageFile: value);
+                        .copyWith(recipeImageBytes: value);
                   }
                 },
               ))
@@ -222,11 +191,12 @@ class CremeSharing {
         extraRecipesImageSize: extraRecipesImageSize,
         textScaleFactor: textScaleFactor,
         hasVideoOnBackground: hasVideoOnBackground,
-        creatorAvatarFile: files[0]!,
-        recipeImageFile: files[1]!,
-        imageBackgroundFile: files.length >= 3 ? files[2] : null,
+        creatorAvatarImageBytes: imageBytes[0]!,
+        recipeImageImageBytes: imageBytes[1]!,
+        imageBackgroundImageBytes:
+            imageBytes.length >= 3 ? imageBytes[2] : null,
         extraRecipesToShow: List.of(extraRecipesToShow)
-            .where((recipeData) => recipeData.recipeImageFile != null)
+            .where((recipeData) => recipeData.recipeImageBytes != null)
             .take(2)
             .toList(),
         recipeImageSize: recipeImageSize,
@@ -241,24 +211,16 @@ class CremeSharing {
       pixelRatio: devicePixelRatio,
       context: context,
     );
-    await Future.wait([
-      ...files.map<Future>((file) async {
-        final exists = (await file?.exists()) ?? false;
-        if (exists) {
-          await file?.delete();
-        }
-      }).toList(),
-      shareToInstagramStories(
-        backgroundImage:
-            hasVideoOnBackground ? null : base64Encode(stickerImagePngBytes),
-        stickerImage:
-            hasVideoOnBackground ? base64Encode(stickerImagePngBytes) : null,
-        backgroundTopColor: backgroundColor,
-        backgroundBottomColor: backgroundColor,
-        contentURL: contentURL,
-        backgroundVideo: backgroundVideoUrl,
-      ),
-    ]);
+    await shareToInstagramStories(
+      backgroundImage:
+          hasVideoOnBackground ? null : base64Encode(stickerImagePngBytes),
+      stickerImage:
+          hasVideoOnBackground ? base64Encode(stickerImagePngBytes) : null,
+      backgroundTopColor: backgroundColor,
+      backgroundBottomColor: backgroundColor,
+      contentURL: contentURL,
+      backgroundVideo: backgroundVideoUrl,
+    );
   }
 
   /// This method should be used to share some cooked recipe to Instagram stories
@@ -304,36 +266,26 @@ class CremeSharing {
             '?w=${(devicePixelRatio * avatarSize.width).round()}'
             '&h=${(devicePixelRatio * avatarSize.width).round()}'
         : null;
-    final files = await Future.wait([
-      _downloadFile(
-        url: creatorAvatarUrlToDownload,
-        filename: 'creator_avatar.png',
-      ),
-      _downloadFile(
-        url: cookedImageUrlToDownload,
-        filename: 'cooked_image.png',
-      ),
+    final imageBytes = await Future.wait([
+      _downloadImage(url: creatorAvatarUrlToDownload),
+      _downloadImage(url: cookedImageUrlToDownload),
       if (userAvatarUrlToDownload != null)
-        _downloadFile(
-          url: userAvatarUrlToDownload,
-          filename: 'user_avatar.png',
-        ),
+        _downloadImage(url: userAvatarUrlToDownload),
       if (!hasVideoOnBackground)
-        _downloadFile(
-          url: imageBackgroundUrlToDownload,
-          filename: 'image_background.png',
-        ),
+        _downloadImage(url: imageBackgroundUrlToDownload),
     ]);
     final stickerImagePngBytes = await _screenshotController.captureFromWidget(
       CookedStickerWidget(
         textScaleFactor: textScaleFactor,
         hasVideoOnBackground: hasVideoOnBackground,
-        imageBackgroundFile: files.length >= 3 ? files.last : null,
-        creatorAvatarFile: files[0]!,
-        cookedImageFile: files[1]!,
-        userAvatarFile: files.length >= 3 && userAvatarUrlToDownload != null
-            ? files[2]
-            : null,
+        imageBackgroundImageBytes:
+            imageBytes.length >= 3 ? imageBytes.last : null,
+        creatorAvatarImageBytes: imageBytes[0]!,
+        cookedImageBytes: imageBytes[1]!,
+        userAvatarImageBytes:
+            imageBytes.length >= 3 && userAvatarUrlToDownload != null
+                ? imageBytes[2]
+                : null,
         cookedImageSize: cookedImageSize,
         imageBackgroundSize: imageBackgroundSize,
         userAvatarSize: avatarSize,
@@ -348,29 +300,20 @@ class CremeSharing {
       pixelRatio: devicePixelRatio,
       context: context,
     );
-    await Future.wait([
-      ...files.map<Future>((file) async {
-        final exists = (await file?.exists()) ?? false;
-        if (exists) {
-          await file?.delete();
-        }
-      }).toList(),
-      shareToInstagramStories(
-        backgroundImage:
-            hasVideoOnBackground ? null : base64Encode(stickerImagePngBytes),
-        stickerImage:
-            hasVideoOnBackground ? base64Encode(stickerImagePngBytes) : null,
-        backgroundTopColor: backgroundColor,
-        backgroundBottomColor: backgroundColor,
-        contentURL: contentURL,
-        backgroundVideo: backgroundVideoUrl,
-      ),
-    ]);
+    await shareToInstagramStories(
+      backgroundImage:
+          hasVideoOnBackground ? null : base64Encode(stickerImagePngBytes),
+      stickerImage:
+          hasVideoOnBackground ? base64Encode(stickerImagePngBytes) : null,
+      backgroundTopColor: backgroundColor,
+      backgroundBottomColor: backgroundColor,
+      contentURL: contentURL,
+      backgroundVideo: backgroundVideoUrl,
+    );
   }
 
-  Future<File?> _downloadFile({
+  Future<Uint8List?> _downloadImage({
     required String url,
-    required String filename,
   }) async {
     try {
       final request = await _httpClient.getUrl(Uri.parse(url));
@@ -379,11 +322,9 @@ class CremeSharing {
         response,
         autoUncompress: true,
       );
-      final temporaryDirectory = (await getTemporaryDirectory()).path;
-      final file = File('$temporaryDirectory/$filename');
-      return await file.writeAsBytes(bytes);
+      return bytes;
     } catch (err) {
-      return null;
+      rethrow;
     }
   }
 }

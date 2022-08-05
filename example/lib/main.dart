@@ -174,13 +174,13 @@ class _HomeScreenState extends State<HomeScreen> {
                               recipeName: 'Simple Syrup',
                               recipeImageUrl:
                                   'https://images.ctfassets.net/3p29fwo3qudu/6FeBEw8yYlcOwxnCYemQey/5c526b3e4d13e9373678cb759e71d9ba/creme-marcio-silva-1-output.jpg',
-                              recipeImageFile: null,
+                              recipeImageBytes: null,
                             ),
                             const RecipeData(
                               recipeName: 'Simple Syrup',
                               recipeImageUrl:
                                   'https://images.ctfassets.net/3p29fwo3qudu/6FeBEw8yYlcOwxnCYemQey/5c526b3e4d13e9373678cb759e71d9ba/creme-marcio-silva-1-output.jpg',
-                              recipeImageFile: null,
+                              recipeImageBytes: null,
                             ),
                           ],
                           backgroundVideoUrl: generateWithBackgroundVideo
