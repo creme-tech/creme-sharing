@@ -66,7 +66,7 @@ class CremeSharing {
     required BuildContext context,
     required String? backgroundVideoUrl,
     Color backgroundColor = Colors.grey,
-    double textScaleFactor = 1.2,
+    double textScaleFactor = 1,
     String? contentURL,
   }) async {
     final devicePixelRatio =
@@ -135,11 +135,12 @@ class CremeSharing {
     required String creatorName,
     required String recipeName,
     required String cremeLogoMessage,
+    required String creatorTag,
     required BuildContext context,
     required String? backgroundVideoUrl,
     required List<RecipeData> extraRecipesToShow,
     Color backgroundColor = Colors.grey,
-    double textScaleFactor = 1.2,
+    double textScaleFactor = 1,
     String? contentURL,
   }) async {
     final devicePixelRatio =
@@ -148,13 +149,13 @@ class CremeSharing {
     final safeAreaPadding = MediaQuery.of(context).padding;
     final maxHeight = screenSize.height - safeAreaPadding.vertical - 48;
     final maxWidth = screenSize.width;
+    final hasVideoOnBackground = backgroundVideoUrl != null;
     const avatarSize = Size(40, 40);
     final recipeImageSize = extraRecipesToShow.length < 2
         ? const Size(261, 261)
         : const Size(165, 260);
     const extraRecipesImageSize = Size(108, 155);
     final imageBackgroundSize = Size(maxWidth, maxHeight);
-    final hasVideoOnBackground = backgroundVideoUrl != null;
     final imageBackgroundUrlToDownload = '$recipeImageUrl'
         '?w=${(devicePixelRatio * imageBackgroundSize.width).round()}'
         '&h=${(devicePixelRatio * imageBackgroundSize.width).round()}';
@@ -188,6 +189,7 @@ class CremeSharing {
     ]);
     final stickerImagePngBytes = await _screenshotController.captureFromWidget(
       RecipeStickerWidget(
+        creatorTag: creatorTag,
         extraRecipesImageSize: extraRecipesImageSize,
         textScaleFactor: textScaleFactor,
         hasVideoOnBackground: hasVideoOnBackground,
@@ -239,19 +241,19 @@ class CremeSharing {
     required BuildContext context,
     required String? backgroundVideoUrl,
     Color backgroundColor = Colors.grey,
-    double textScaleFactor = 1.2,
+    double textScaleFactor = 1,
     String? contentURL,
   }) async {
     final devicePixelRatio =
         max(3, MediaQuery.of(context).devicePixelRatio).toDouble();
     final screenSize = MediaQuery.of(context).size;
     final safeAreaPadding = MediaQuery.of(context).padding;
+    final hasVideoOnBackground = backgroundVideoUrl != null;
     final maxHeight = screenSize.height - safeAreaPadding.vertical - 48;
     final maxWidth = screenSize.width;
     const avatarSize = Size(40, 40);
     const cookedImageSize = Size(261, 261);
     final imageBackgroundSize = Size(maxWidth, maxHeight);
-    final hasVideoOnBackground = backgroundVideoUrl != null;
     final imageBackgroundUrlToDownload = '$creatorAvatarUrl'
         '?w=${(devicePixelRatio * imageBackgroundSize.width).round()}'
         '&h=${(devicePixelRatio * imageBackgroundSize.width).round()}';
