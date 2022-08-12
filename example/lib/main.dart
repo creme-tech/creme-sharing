@@ -132,6 +132,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           });
                         });
                         await cremeSharing.shareRecipesToInstagramStories(
+                          creatorTag: 'Mixologist',
                           extraRecipesToShow: [],
                           backgroundVideoUrl: generateWithBackgroundVideo
                               ? backgroundVideoUrl
@@ -169,6 +170,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           });
                         });
                         await cremeSharing.shareRecipesToInstagramStories(
+                          creatorTag: 'Mixologist',
                           extraRecipesToShow: [
                             const RecipeData(
                               recipeName: 'Simple Syrup',

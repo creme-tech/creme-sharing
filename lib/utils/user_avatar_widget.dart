@@ -42,14 +42,15 @@ class UserAvatarWidget extends StatelessWidget {
         width: avatarSize.width,
         child: Stack(
           children: [
-            Container(
-              height: avatarSize.height,
-              width: avatarSize.width,
-              decoration: const BoxDecoration(
-                color: AppColors.avatarBackgroundColor,
-                shape: BoxShape.circle,
+            if (avatarImageBytes == null)
+              Container(
+                height: avatarSize.height,
+                width: avatarSize.width,
+                decoration: const BoxDecoration(
+                  color: AppColors.avatarBackgroundColor,
+                  shape: BoxShape.circle,
+                ),
               ),
-            ),
             if (avatarImageBytes != null)
               Align(
                 alignment: Alignment.center,
