@@ -26,6 +26,8 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
+		<string>whatsapp</string>
+		<string>twitter</string>
 		<string>instagram</string>
 		<string>instagram-stories</string>
 	</array>

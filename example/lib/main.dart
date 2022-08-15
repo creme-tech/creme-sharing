@@ -32,6 +32,8 @@ class _HomeScreenState extends State<HomeScreen> {
       'https://storage.googleapis.com/muxdemofiles/mux-video-intro.mp4';
   bool generateWithBackgroundVideo = false;
   bool? instagramIsAvailableToShare;
+  bool? whatsappIsAvailableToShare;
+  bool? twitterIsAvailableToShare;
   bool loading = false;
   Duration? durationToShare;
 
@@ -42,6 +44,20 @@ class _HomeScreenState extends State<HomeScreen> {
           (value) => WidgetsBinding.instance.addPostFrameCallback((_) {
             setState(() {
               instagramIsAvailableToShare = value;
+            });
+          }),
+        );
+    cremeSharing.whatsappIsAvailableToShare().then(
+          (value) => WidgetsBinding.instance.addPostFrameCallback((_) {
+            setState(() {
+              whatsappIsAvailableToShare = value;
+            });
+          }),
+        );
+    cremeSharing.twitterIsAvailableToShare().then(
+          (value) => WidgetsBinding.instance.addPostFrameCallback((_) {
+            setState(() {
+              twitterIsAvailableToShare = value;
             });
           }),
         );
@@ -63,6 +79,48 @@ class _HomeScreenState extends State<HomeScreen> {
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(),
         slivers: [
+          SliverToBoxAdapter(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Text(
+                    "Can share whatsapp: $whatsappIsAvailableToShare",
+                    style: const TextStyle(color: Colors.black),
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () async {
+                    await cremeSharing.shareTextToWhatsapp(
+                      text: "Testing to share with link https://google.com",
+                    );
+                  },
+                  child: const Text('share text to whatsapp'),
+                ),
+              ],
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Text(
+                    "Can share twitter: $twitterIsAvailableToShare",
+                    style: const TextStyle(color: Colors.black),
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () async {
+                    await cremeSharing.shareTextToTwitter(
+                      text: "Testing to share with link https://google.com",
+                    );
+                  },
+                  child: const Text('share text to twitter'),
+                ),
+              ],
+            ),
+          ),
           if (instagramIsAvailableToShare == null || loading)
             const SliverFillRemaining(
               child: Center(child: CircularProgressIndicator()),

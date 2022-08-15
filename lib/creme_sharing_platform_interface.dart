@@ -25,8 +25,31 @@ abstract class CremeSharingPlatform extends PlatformInterface {
     _instance = instance;
   }
 
+  Future<bool> whatsappIsAvailableToShare() {
+    throw UnimplementedError(
+        'whatsappIsAvailableToShare() has not been implemented.');
+  }
+
   Future<bool> instagramIsAvailableToShare() {
-    throw UnimplementedError('platformVersion() has not been implemented.');
+    throw UnimplementedError(
+        'instagramIsAvailableToShare() has not been implemented.');
+  }
+
+  Future<bool> twitterIsAvailableToShare() {
+    throw UnimplementedError(
+        'twitterIsAvailableToShare() has not been implemented.');
+  }
+
+  Future<void> shareTextToTwitter({
+    String? text,
+  }) {
+    throw UnimplementedError('shareTextToTwitter() has not been implemented.');
+  }
+
+  Future<void> shareTextToWhatsapp({
+    String? text,
+  }) {
+    throw UnimplementedError('shareTextToWhatsapp() has not been implemented.');
   }
 
   Future<void> shareToInstagramStories({
@@ -37,6 +60,7 @@ abstract class CremeSharingPlatform extends PlatformInterface {
     String? backgroundImage,
     String? contentURL,
   }) {
-    throw UnimplementedError('platformVersion() has not been implemented.');
+    throw UnimplementedError(
+        'shareToInstagramStories() has not been implemented.');
   }
 }

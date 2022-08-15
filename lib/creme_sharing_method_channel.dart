@@ -25,6 +25,54 @@ class MethodChannelCremeSharing extends CremeSharingPlatform {
   }
 
   @override
+  Future<bool> whatsappIsAvailableToShare() async {
+    if (Platform.isIOS) {
+      return (await methodChannel
+              .invokeMethod<bool>('whatsappIsAvailableToShare') ??
+          false);
+    }
+
+    /// TODO: implement Android
+    return super.whatsappIsAvailableToShare();
+  }
+
+  @override
+  Future<bool> twitterIsAvailableToShare() async {
+    if (Platform.isIOS) {
+      return (await methodChannel
+              .invokeMethod<bool>('twitterIsAvailableToShare') ??
+          false);
+    }
+
+    /// TODO: implement Android
+    return super.whatsappIsAvailableToShare();
+  }
+
+  @override
+  Future<void> shareTextToTwitter({String? text}) async {
+    if (Platform.isIOS) {
+      return await methodChannel.invokeMethod('shareTextToTwitter', {
+        'message': text,
+      });
+    }
+
+    // TODO: implement Android
+    return super.shareTextToTwitter(text: text);
+  }
+
+  @override
+  Future<void> shareTextToWhatsapp({String? text}) async {
+    if (Platform.isIOS) {
+      return await methodChannel.invokeMethod('shareTextToWhatsapp', {
+        'message': text,
+      });
+    }
+
+    // TODO: implement Android
+    return super.shareTextToWhatsapp(text: text);
+  }
+
+  @override
   Future<void> shareToInstagramStories({
     Color? backgroundTopColor,
     Color? backgroundBottomColor,

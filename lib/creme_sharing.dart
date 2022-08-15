@@ -24,6 +24,22 @@ class CremeSharing {
     _httpClient.close(force: true);
   }
 
+  /// This method will check is the user have the whatsapp available to share
+  Future<bool> whatsappIsAvailableToShare() =>
+      CremeSharingPlatform.instance.whatsappIsAvailableToShare();
+
+  /// This method shares text to whatsapp
+  Future<void> shareTextToWhatsapp({String? text}) =>
+      CremeSharingPlatform.instance.shareTextToWhatsapp(text: text);
+
+  /// This method will check is the user have the twitter available to share
+  Future<bool> twitterIsAvailableToShare() =>
+      CremeSharingPlatform.instance.twitterIsAvailableToShare();
+
+  /// This method shares text to twitter
+  Future<void> shareTextToTwitter({String? text}) =>
+      CremeSharingPlatform.instance.shareTextToTwitter(text: text);
+
   /// This method will check is the user have the Instagram available to share
   Future<bool> instagramIsAvailableToShare() =>
       CremeSharingPlatform.instance.instagramIsAvailableToShare();

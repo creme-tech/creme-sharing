@@ -21,6 +21,62 @@ public class SwiftCremeSharingPlugin: NSObject, FlutterPlugin {
                   return result(false)
               }
           }
+        case "whatsappIsAvailableToShare":
+          if let whatsappUrl = URL(string: "whatsapp://send?text=Message") {
+              if UIApplication.shared.canOpenURL(whatsappUrl) {
+                  if #available(iOS 10.0, *) {
+                    return result(true)
+                  }
+                  return result(false)
+              } else {
+                  return result(false)
+              }
+          }
+        case "twitterIsAvailableToShare":
+          if let twitterUrl = URL(string: "twitter://post?message=Message") {
+              if UIApplication.shared.canOpenURL(twitterUrl) {
+                  if #available(iOS 10.0, *) {
+                    return result(true)
+                  }
+                  return result(false)
+              } else {
+                  return result(false)
+              }
+          }
+        case "shareTextToTwitter":
+        let arguments = (call.arguments as! [String: Any])
+          let message = arguments["message"] as? String
+          let twitterMessage = "twitter://post?message=\(message!)"
+          var characterSet = CharacterSet.urlQueryAllowed
+          characterSet.insert(charactersIn: "?&")
+          let twitterAppURL  = NSURL(string: twitterMessage.addingPercentEncoding(withAllowedCharacters: characterSet)!)
+
+
+          if UIApplication.shared.canOpenURL(twitterAppURL! as URL) {
+            if #available(iOS 10.0, *) {
+                UIApplication.shared.openURL(twitterAppURL! as URL)
+                return result(nil)
+            }
+            return result(nil)
+          } else {
+            return result(nil)
+          }
+        case "shareTextToWhatsapp":
+          let arguments = (call.arguments as! [String: Any])
+          let message = arguments["message"] as? String
+          var whatsMessage = "whatsapp://send?text=\(message!)"
+          var characterSet = CharacterSet.urlQueryAllowed
+          characterSet.insert(charactersIn: "?&")
+          let whatsAppURL  = NSURL(string: whatsMessage.addingPercentEncoding(withAllowedCharacters: characterSet)!)
+          if UIApplication.shared.canOpenURL(whatsAppURL! as URL) {
+            if #available(iOS 10.0, *) {
+                UIApplication.shared.openURL(whatsAppURL! as URL)
+                return result(nil)
+            }
+            return result(nil)
+          } else {
+            return result(nil)
+          }
         case "shareToInstagramStories":
           if let storiesUrl = URL(string: "instagram-stories://share") {
               if UIApplication.shared.canOpenURL(storiesUrl) {
