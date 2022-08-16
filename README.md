@@ -31,12 +31,14 @@ WIP
 
 You need to add two fields in the `info.plist` file:
 
-1. [Allow Listing Facebook's Custom URL Scheme](https://developers.facebook.com/docs/sharing/sharing-to-stories/ios-developers) that's just add the text below on `info.plist`:
+1. [Allow Listing Facebook's Custom URL Scheme](https://developers.facebook.com/docs/sharing/sharing-to-stories/ios-developers), twitter and whatsapp that's just add the text below on `info.plist`:
 
 ```plist
 ...
 <key>LSApplicationQueriesSchemes</key>
 	<array>
+		<string>whatsapp</string>
+		<string>twitter</string>
 		<string>instagram</string>
 		<string>instagram-stories</string>
 	</array>
