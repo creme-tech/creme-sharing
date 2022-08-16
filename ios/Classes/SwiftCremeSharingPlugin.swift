@@ -46,25 +46,20 @@ public class SwiftCremeSharingPlugin: NSObject, FlutterPlugin {
         case "shareTextToTwitter":
         let arguments = (call.arguments as! [String: Any])
           let message = arguments["message"] as? String
-          let twitterMessage = "twitter://post?message=\(message!)"
-          var characterSet = CharacterSet.urlQueryAllowed
-          characterSet.insert(charactersIn: "?&")
-          let twitterAppURL  = NSURL(string: twitterMessage.addingPercentEncoding(withAllowedCharacters: characterSet)!)
-
-
-          if UIApplication.shared.canOpenURL(twitterAppURL! as URL) {
+          var components = URLComponents(string: "twitter://post")!
+          components.queryItems = [URLQueryItem(name: "message", value: message)]
+          if let url = components.url, UIApplication.shared.canOpenURL(url) {
             if #available(iOS 10.0, *) {
-                UIApplication.shared.openURL(twitterAppURL! as URL)
+                UIApplication.shared.openURL(url)
                 return result(nil)
             }
-            return result(nil)
           } else {
-            return result(nil)
+              return result(nil)
           }
         case "shareTextToWhatsapp":
           let arguments = (call.arguments as! [String: Any])
           let message = arguments["message"] as? String
-          var whatsMessage = "whatsapp://send?text=\(message!)"
+          let whatsMessage = "whatsapp://send?text=\(message!)"
           var characterSet = CharacterSet.urlQueryAllowed
           characterSet.insert(charactersIn: "?&")
           let whatsAppURL  = NSURL(string: whatsMessage.addingPercentEncoding(withAllowedCharacters: characterSet)!)

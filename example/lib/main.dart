@@ -92,7 +92,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 ElevatedButton(
                   onPressed: () async {
                     await cremeSharing.shareTextToWhatsapp(
-                      text: "Testing to share with link https://google.com",
+                      text:
+                          "Check out Salsa Macha by Luana Sabino & Eduardo Ortiz CREME! https://cremetech.page.link/NWN4",
                     );
                   },
                   child: const Text('share text to whatsapp'),
@@ -113,7 +114,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 ElevatedButton(
                   onPressed: () async {
                     await cremeSharing.shareTextToTwitter(
-                      text: "Testing to share with link https://google.com",
+                      text:
+                          "Check out Salsa Macha by Luana Sabino & Eduardo Ortiz CREME! https://cremetech.page.link/NWN4",
                     );
                   },
                   child: const Text('share text to twitter'),
