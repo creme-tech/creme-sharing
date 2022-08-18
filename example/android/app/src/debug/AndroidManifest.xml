@@ -5,4 +5,10 @@
          to allow setting breakpoints, to provide hot reload, etc.
     -->
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"/>
+    <queries>
+        <package android:name="com.instagram.android" />
+        <package android:name="com.twitter.android" />
+        <package android:name="com.whatsapp" />
+    </queries>
 </manifest>

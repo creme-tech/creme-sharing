@@ -14,62 +14,37 @@ class MethodChannelCremeSharing extends CremeSharingPlatform {
 
   @override
   Future<bool> instagramIsAvailableToShare() async {
-    if (Platform.isIOS) {
-      return (await methodChannel
-              .invokeMethod<bool>('instagramIsAvailableToShare') ??
-          false);
-    }
-
-    /// TODO: implement Android
-    return super.instagramIsAvailableToShare();
+    return (await methodChannel
+            .invokeMethod<bool>('instagramIsAvailableToShare') ??
+        false);
   }
 
   @override
   Future<bool> whatsappIsAvailableToShare() async {
-    if (Platform.isIOS) {
-      return (await methodChannel
-              .invokeMethod<bool>('whatsappIsAvailableToShare') ??
-          false);
-    }
-
-    /// TODO: implement Android
-    return super.whatsappIsAvailableToShare();
+    return (await methodChannel
+            .invokeMethod<bool>('whatsappIsAvailableToShare') ??
+        false);
   }
 
   @override
   Future<bool> twitterIsAvailableToShare() async {
-    if (Platform.isIOS) {
-      return (await methodChannel
-              .invokeMethod<bool>('twitterIsAvailableToShare') ??
-          false);
-    }
-
-    /// TODO: implement Android
-    return super.whatsappIsAvailableToShare();
+    return (await methodChannel
+            .invokeMethod<bool>('twitterIsAvailableToShare') ??
+        false);
   }
 
   @override
   Future<void> shareTextToTwitter({String? text}) async {
-    if (Platform.isIOS) {
-      return await methodChannel.invokeMethod('shareTextToTwitter', {
-        'message': text,
-      });
-    }
-
-    // TODO: implement Android
-    return super.shareTextToTwitter(text: text);
+    return await methodChannel.invokeMethod('shareTextToTwitter', {
+      'message': text,
+    });
   }
 
   @override
   Future<void> shareTextToWhatsapp({String? text}) async {
-    if (Platform.isIOS) {
-      return await methodChannel.invokeMethod('shareTextToWhatsapp', {
-        'message': text,
-      });
-    }
-
-    // TODO: implement Android
-    return super.shareTextToWhatsapp(text: text);
+    return await methodChannel.invokeMethod('shareTextToWhatsapp', {
+      'message': text,
+    });
   }
 
   @override
