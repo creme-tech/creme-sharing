@@ -69,166 +69,160 @@ class CookedStickerWidget extends StatelessWidget {
         cookedImageSize: cookedImageSize,
       );
     }
-
+    const width = 375.0;
+    const height = 700.0;
     return Container(
-      color: hasVideoOnBackground
-          ? Colors.transparent
-          : backgroundColor ?? Colors.transparent,
-      child: Stack(
-        children: [
-          if (!hasVideoOnBackground && imageBackgroundImageBytes != null)
-            Positioned.fill(
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(24),
-                child: Image.memory(
-                  imageBackgroundImageBytes!,
-                  fit: BoxFit.cover,
-                  height: imageBackgroundSize.height,
-                  width: imageBackgroundSize.width,
-                  filterQuality: FilterQuality.high,
-                ),
-              ),
-            ),
-          if (!hasVideoOnBackground && imageBackgroundImageBytes != null)
-            Positioned.fill(
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(24),
-                child: Container(
-                  decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        Colors.transparent,
-                        Colors.black87,
-                      ],
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
+      color: backgroundColor,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(24),
+        child: SizedBox(
+          width: width,
+          height: height,
+          child: Stack(
+            children: [
+              if (imageBackgroundImageBytes != null)
+                Positioned.fill(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(24),
+                    child: Image.memory(
+                      imageBackgroundImageBytes!,
+                      fit: BoxFit.cover,
+                      height: width,
+                      width: height,
+                      filterQuality: FilterQuality.high,
                     ),
                   ),
                 ),
-              ),
-            ),
-          Positioned.fill(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
+              if (imageBackgroundImageBytes != null)
+                Positioned.fill(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(24),
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            Colors.transparent,
+                            Colors.black87,
+                          ],
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisSize: MainAxisSize.max,
                 children: [
                   const Spacer(),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      SizedBox(
+                  SizedBox(
+                    height: cookedImageSize.height,
+                    width: cookedImageSize.width,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(16),
+                      child: Image.memory(
+                        cookedImageBytes,
                         height: cookedImageSize.height,
                         width: cookedImageSize.width,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(16),
-                          child: Image.memory(
-                            cookedImageBytes,
-                            height: cookedImageSize.height,
-                            width: cookedImageSize.width,
-                            fit: BoxFit.cover,
-                            filterQuality: FilterQuality.high,
-                          ),
-                        ),
+                        fit: BoxFit.cover,
+                        filterQuality: FilterQuality.high,
                       ),
-                      const SizedBox(height: 16),
-                      SizedBox(
-                        width: 70,
-                        height: 40,
-                        child: Stack(
-                          children: [
-                            Positioned(
-                              left: 0,
-                              width: 40,
-                              top: 0,
-                              bottom: 0,
-                              child: SizedBox(
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  SizedBox(
+                    width: 70,
+                    height: 40,
+                    child: Stack(
+                      children: [
+                        Positioned(
+                          left: 0,
+                          width: 40,
+                          top: 0,
+                          bottom: 0,
+                          child: SizedBox(
+                            height: creatorAvatarSize.height,
+                            width: creatorAvatarSize.width,
+                            child: ClipOval(
+                              child: Image.memory(
+                                creatorAvatarImageBytes,
                                 height: creatorAvatarSize.height,
                                 width: creatorAvatarSize.width,
-                                child: ClipOval(
-                                  child: Image.memory(
-                                    creatorAvatarImageBytes,
-                                    height: creatorAvatarSize.height,
-                                    width: creatorAvatarSize.width,
-                                    fit: BoxFit.cover,
-                                    filterQuality: FilterQuality.high,
-                                  ),
-                                ),
+                                fit: BoxFit.cover,
+                                filterQuality: FilterQuality.high,
                               ),
                             ),
-                            Positioned(
-                              right: 0,
-                              width: 40,
-                              top: 0,
-                              bottom: 0,
-                              child: UserAvatarWidget(
-                                avatarImageBytes: userAvatarImageBytes,
-                                name: userName,
-                                avatarSize: userAvatarSize,
-                                letterTextStyle: null,
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 8),
+                        Positioned(
+                          right: 0,
+                          width: 40,
+                          top: 0,
+                          bottom: 0,
+                          child: UserAvatarWidget(
+                            avatarImageBytes: userAvatarImageBytes,
+                            name: userName,
+                            avatarSize: userAvatarSize,
+                            letterTextStyle: null,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    recipeName,
+                    style: AppFonts.bodyBold.copyWith(color: Colors.white),
+                    textAlign: TextAlign.center,
+                    textScaleFactor: textScaleFactor ??
+                        MediaQuery.of(context).textScaleFactor,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  Text(
+                    '$creatorName & $userName',
+                    style:
+                        AppFonts.bodyRegular.copyWith(color: AppColors.white50),
+                    textAlign: TextAlign.center,
+                    textScaleFactor: textScaleFactor ??
+                        MediaQuery.of(context).textScaleFactor,
+                    maxLines: 4,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 78),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Spacer(),
                       Text(
-                        recipeName,
-                        style: AppFonts.bodyBold.copyWith(color: Colors.white),
-                        textAlign: TextAlign.center,
-                        textScaleFactor: textScaleFactor ??
-                            MediaQuery.of(context).textScaleFactor,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      Text(
-                        '$creatorName & $userName',
+                        cremeLogoMessage,
                         style: AppFonts.bodyRegular
                             .copyWith(color: AppColors.white50),
                         textAlign: TextAlign.center,
                         textScaleFactor: textScaleFactor ??
                             MediaQuery.of(context).textScaleFactor,
-                        maxLines: 4,
-                        overflow: TextOverflow.ellipsis,
                       ),
-                      const SizedBox(height: 78),
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          const Spacer(),
-                          Text(
-                            cremeLogoMessage,
-                            style: AppFonts.bodyRegular
-                                .copyWith(color: AppColors.white50),
-                            textAlign: TextAlign.center,
-                            textScaleFactor: textScaleFactor ??
-                                MediaQuery.of(context).textScaleFactor,
-                          ),
-                          const SizedBox(width: 4),
-                          SvgPicture.asset(
-                            AppSvg.cremeLogo,
-                            package: packageName,
-                            height: 29,
-                            width: 35,
-                            fit: BoxFit.fill,
-                          ),
-                          const Spacer(),
-                        ],
+                      const SizedBox(width: 4),
+                      SvgPicture.asset(
+                        AppSvg.cremeLogo,
+                        package: packageName,
+                        height: 29,
+                        width: 35,
+                        fit: BoxFit.fill,
                       ),
-                      const SizedBox(height: 134),
+                      const Spacer(),
                     ],
                   ),
+                  const SizedBox(height: 54),
                 ],
               ),
-            ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
