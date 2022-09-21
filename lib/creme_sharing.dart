@@ -70,6 +70,47 @@ class CremeSharing {
         contentURL: contentURL,
       );
 
+  /// All the arguments are the same of the documentation in https://developers.facebook.com/docs/sharing/sharing-to-stories
+  /// but in the IOS side you can:
+  /// - [backgroundTopColor] : will be transformed to a String in hex color
+  /// - [backgroundBottomColor] : will be transformed to a String in hex color
+  /// - [stickerImage] : will be transformed to an image if the value be a URL or an image encoded 64 as String
+  /// - [backgroundImage] : will be transformed to an image if the value be an URL or an image encoded 64 as String
+  /// - [backgroundVideo] : will be transformed to an image if the value be an URL
+  /// - [contentURL] : it will be a string (that don't work because the app need to be a partner of Instagram)
+  /// but in the Android will be implemented (WIP)
+  Future<void> shareToInstagramStoriesUsingWidgets({
+    Color? backgroundTopColor,
+    Color? backgroundBottomColor,
+    Widget? stickerImage,
+    String? backgroundVideo,
+    Widget? backgroundImage,
+    String? contentURL,
+  }) async {
+    final imagesPngBytes = await Future.wait([
+      if (stickerImage != null)
+        _screenshotController.captureFromWidget(stickerImage),
+      if (backgroundImage != null)
+        _screenshotController.captureFromWidget(backgroundImage),
+    ]);
+    final stickerImagePngBytes =
+        stickerImage != null ? imagesPngBytes.first : null;
+    final backgroundImagePngBytes =
+        backgroundImage != null ? imagesPngBytes.last : null;
+    CremeSharingPlatform.instance.shareToInstagramStories(
+      backgroundTopColor: backgroundTopColor,
+      backgroundBottomColor: backgroundBottomColor,
+      stickerImage: stickerImagePngBytes != null
+          ? base64Encode(stickerImagePngBytes)
+          : null,
+      backgroundVideo: backgroundVideo,
+      backgroundImage: backgroundImagePngBytes != null
+          ? base64Encode(backgroundImagePngBytes)
+          : null,
+      contentURL: contentURL,
+    );
+  }
+
   /// This method should be used to share some creator to Instagram stories
   /// and the mockup can be found on: https://www.figma.com/file/r5ox3y5gRNFXPDb1KcsQS3/CREME-2022?node-id=2316%3A217770
   /// Then it will create an image and othe background will be the [backgroundVideoUrl]
