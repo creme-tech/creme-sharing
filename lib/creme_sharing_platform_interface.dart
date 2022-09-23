@@ -64,6 +64,11 @@ abstract class CremeSharingPlatform extends PlatformInterface {
         'shareToInstagramStories() has not been implemented.');
   }
 
+  Future<bool> instagramIsAvailableToShareFeed() {
+    throw UnimplementedError(
+        'instagramIsAvailableToShareFeed() has not been implemented.');
+  }
+
   Future<void> shareToInstagramFeed({
     required String image,
   }) {

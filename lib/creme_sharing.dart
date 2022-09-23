@@ -44,6 +44,10 @@ class CremeSharing {
   Future<bool> instagramIsAvailableToShare() =>
       CremeSharingPlatform.instance.instagramIsAvailableToShare();
 
+  /// This method will check is the user have the Instagram available to share to Feed
+  Future<bool> instagramIsAvailableToShareFeed() =>
+      CremeSharingPlatform.instance.instagramIsAvailableToShareFeed();
+
   /// All the arguments are the same of the documentation in https://developers.facebook.com/docs/sharing/sharing-to-stories
   /// but in the IOS side you can:
   /// - [backgroundTopColor] : will be transformed to a String in hex color
