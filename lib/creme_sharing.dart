@@ -97,6 +97,20 @@ class CremeSharing {
     );
   }
 
+  Future<Uint8List> generateImageFromWidget({
+    required Widget widget,
+    required BuildContext context,
+  }) async {
+    final devicePixelRatio =
+        max(3, MediaQuery.of(context).devicePixelRatio).toDouble();
+    final imagePngBytes = await _screenshotController.captureFromWidget(
+      widget,
+      pixelRatio: devicePixelRatio,
+      context: context,
+    );
+    return imagePngBytes;
+  }
+
   /// All the arguments are the same of the documentation in https://developers.facebook.com/docs/sharing/sharing-to-stories
   /// but in the IOS side you can:
   /// - [backgroundTopColor] : will be transformed to a String in hex color
