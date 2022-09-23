@@ -70,6 +70,29 @@ class CremeSharing {
         contentURL: contentURL,
       );
 
+  Future<void> shareToInstagramFeed({
+    required String image,
+  }) =>
+      CremeSharingPlatform.instance.shareToInstagramFeed(
+        image: image,
+      );
+
+  Future<void> shareToInstagramFeedUsingWidget({
+    required Widget image,
+    required BuildContext context,
+  }) async {
+    final devicePixelRatio =
+        max(3, MediaQuery.of(context).devicePixelRatio).toDouble();
+    final imagePngBytes = await _screenshotController.captureFromWidget(
+      image,
+      pixelRatio: devicePixelRatio,
+      context: context,
+    );
+    CremeSharingPlatform.instance.shareToInstagramFeed(
+      image: base64Encode(imagePngBytes),
+    );
+  }
+
   /// All the arguments are the same of the documentation in https://developers.facebook.com/docs/sharing/sharing-to-stories
   /// but in the IOS side you can:
   /// - [backgroundTopColor] : will be transformed to a String in hex color
@@ -86,12 +109,23 @@ class CremeSharing {
     String? backgroundVideo,
     Widget? backgroundImage,
     String? contentURL,
+    required BuildContext context,
   }) async {
+    final devicePixelRatio =
+        max(3, MediaQuery.of(context).devicePixelRatio).toDouble();
     final imagesPngBytes = await Future.wait([
       if (stickerImage != null)
-        _screenshotController.captureFromWidget(stickerImage),
+        _screenshotController.captureFromWidget(
+          stickerImage,
+          pixelRatio: devicePixelRatio,
+          context: context,
+        ),
       if (backgroundImage != null)
-        _screenshotController.captureFromWidget(backgroundImage),
+        _screenshotController.captureFromWidget(
+          backgroundImage,
+          pixelRatio: devicePixelRatio,
+          context: context,
+        ),
     ]);
     final stickerImagePngBytes =
         stickerImage != null ? imagesPngBytes.first : null;
@@ -143,9 +177,9 @@ class CremeSharing {
         '?w=${(devicePixelRatio * avatarSize.width).round()}'
         '&h=${(devicePixelRatio * avatarSize.width).round()}';
     final imageBytes = await Future.wait([
-      _downloadImage(url: creatorAvatarUrlToDownload),
+      downloadImage(url: creatorAvatarUrlToDownload),
       if (!hasVideoOnBackground)
-        _downloadImage(url: imageBackgroundUrlToDownload),
+        downloadImage(url: imageBackgroundUrlToDownload),
     ]);
     final stickerImagePngBytes = await _screenshotController.captureFromWidget(
       CreatorStickerWidget(
@@ -223,13 +257,13 @@ class CremeSharing {
         '?w=${(devicePixelRatio * recipeImageSize.width).round()}'
         '&h=${(devicePixelRatio * recipeImageSize.width).round()}';
     final imageBytes = await Future.wait([
-      _downloadImage(url: creatorAvatarUrlToDownload),
-      _downloadImage(url: recipeImageUrlToDownload),
+      downloadImage(url: creatorAvatarUrlToDownload),
+      downloadImage(url: recipeImageUrlToDownload),
       if (!hasVideoOnBackground)
-        _downloadImage(url: imageBackgroundUrlToDownload),
+        downloadImage(url: imageBackgroundUrlToDownload),
       ...List.of(extraRecipesToShow)
           .take(2)
-          .map<Future>((recipeData) => _downloadImage(
+          .map<Future>((recipeData) => downloadImage(
                 url: '${recipeData.recipeImageUrl}'
                     '?w=${(devicePixelRatio * extraRecipesImageSize.width).round()}'
                     '&h=${(devicePixelRatio * extraRecipesImageSize.width).round()}',
@@ -326,12 +360,12 @@ class CremeSharing {
             '&h=${(devicePixelRatio * avatarSize.width).round()}'
         : null;
     final imageBytes = await Future.wait([
-      _downloadImage(url: creatorAvatarUrlToDownload),
-      _downloadImage(url: cookedImageUrlToDownload),
+      downloadImage(url: creatorAvatarUrlToDownload),
+      downloadImage(url: cookedImageUrlToDownload),
       if (userAvatarUrlToDownload != null)
-        _downloadImage(url: userAvatarUrlToDownload),
+        downloadImage(url: userAvatarUrlToDownload),
       if (!hasVideoOnBackground)
-        _downloadImage(url: imageBackgroundUrlToDownload),
+        downloadImage(url: imageBackgroundUrlToDownload),
     ]);
     final stickerImagePngBytes = await _screenshotController.captureFromWidget(
       CookedStickerWidget(
@@ -371,7 +405,7 @@ class CremeSharing {
     );
   }
 
-  Future<Uint8List?> _downloadImage({
+  Future<Uint8List?> downloadImage({
     required String url,
   }) async {
     try {
