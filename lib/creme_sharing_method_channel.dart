@@ -101,4 +101,15 @@ class MethodChannelCremeSharing extends CremeSharingPlatform {
     /// TODO: implement Android
     return super.shareToInstagramFeed(image: image);
   }
+
+  @override
+  Future<bool> instagramIsAvailableToShareFeed() async {
+    if (Platform.isIOS) {
+      return await methodChannel
+          .invokeMethod('instagramIsAvailableToShareFeed');
+    }
+
+    /// TODO: implement Android
+    return false;
+  }
 }
