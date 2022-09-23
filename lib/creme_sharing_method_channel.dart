@@ -84,4 +84,21 @@ class MethodChannelCremeSharing extends CremeSharingPlatform {
       backgroundImage: backgroundImage,
     );
   }
+
+  @override
+  Future<void> shareToInstagramFeed({
+    required String image,
+  }) async {
+    if (Platform.isIOS) {
+      return await methodChannel.invokeMethod(
+        'shareToInstagramFeed',
+        {
+          'image': image,
+        },
+      );
+    }
+
+    /// TODO: implement Android
+    return super.shareToInstagramFeed(image: image);
+  }
 }
