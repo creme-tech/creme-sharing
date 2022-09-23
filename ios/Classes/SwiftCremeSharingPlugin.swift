@@ -23,6 +23,17 @@ public class SwiftCremeSharingPlugin: NSObject, FlutterPlugin {
           return result(false)
         }
       }
+    case "instagramIsAvailableToShareFeed":
+      if let storiesUrl = URL(string: "instagram://") {
+        if UIApplication.shared.canOpenURL(storiesUrl) {
+          if #available(iOS 10.0, *) {
+            return result(true)
+          }
+          return result(false)
+        } else {
+          return result(false)
+        }
+      }
     case "whatsappIsAvailableToShare":
       if let whatsappUrl = URL(string: "whatsapp://send?text=Message") {
         if UIApplication.shared.canOpenURL(whatsappUrl) {
