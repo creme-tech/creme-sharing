@@ -1,7 +1,5 @@
 import 'dart:math';
-import 'dart:convert';
-import 'dart:io' show HttpClient;
-import 'dart:typed_data';
+import 'dart:io' show HttpClient, Platform;
 
 import 'package:creme_sharing/utils/cooked_sticker_widget.dart';
 import 'package:creme_sharing/utils/creator_sticker_widget.dart';
@@ -54,47 +52,55 @@ class CremeSharing {
   /// - [backgroundBottomColor] : will be transformed to a String in hex color
   /// - [stickerImage] : will be transformed to an image if the value be a URL or an image encoded 64 as String
   /// - [backgroundImage] : will be transformed to an image if the value be an URL or an image encoded 64 as String
-  /// - [backgroundVideo] : will be transformed to an image if the value be an URL
+  /// - [backgroundVideoUrl] : will be transformed to an image if the value be an URL
   /// - [contentURL] : it will be a string (that don't work because the app need to be a partner of Instagram)
   /// but in the Android will be implemented (WIP)
   Future<void> shareToInstagramStories({
     Color? backgroundTopColor,
     Color? backgroundBottomColor,
-    String? stickerImage,
-    String? backgroundVideo,
-    String? backgroundImage,
+    Uint8List? stickerImageBytes,
+    String? backgroundVideoUrl,
+    Uint8List? backgroundImageBytes,
     String? contentURL,
+    Uint8List? backgroundVideoBytes,
   }) =>
       CremeSharingPlatform.instance.shareToInstagramStories(
         backgroundTopColor: backgroundTopColor,
         backgroundBottomColor: backgroundBottomColor,
-        stickerImage: stickerImage,
-        backgroundVideo: backgroundVideo,
-        backgroundImage: backgroundImage,
+        stickerImageBytes: stickerImageBytes,
+        backgroundVideoUrl: backgroundVideoUrl,
+        backgroundImageBytes: backgroundImageBytes,
+        backgroundVideoBytes: backgroundVideoBytes,
         contentURL: contentURL,
       );
 
-  Future<void> shareToInstagramFeed({
-    required String image,
-  }) =>
-      CremeSharingPlatform.instance.shareToInstagramFeed(
-        image: image,
-      );
+  /// This method will share the [image] to the Instagram Feed:
+  ///
+  /// - **iOS**: the [image] parameter must be a [Uint8List] that will be
+  /// encoded as base64 and passed to native open and share on Instagram Feed
+  /// the image.
+  /// - **Android**: the [image] parameter must be a [Uint8List] that will be
+  /// saved locally as temporary file while you is sharing to Instagram Feed and
+  /// after the file will be deleted.
+  ///
+  /// More information at https://developers.facebook.com/docs/instagram/sharing-to-feed
+  Future<void> shareToInstagramFeed({required Uint8List imageBytes}) =>
+      CremeSharingPlatform.instance
+          .shareToInstagramFeed(imageBytes: imageBytes);
 
   Future<void> shareToInstagramFeedUsingWidget({
-    required Widget image,
+    required Widget widget,
     required BuildContext context,
   }) async {
     final devicePixelRatio =
         max(3, MediaQuery.of(context).devicePixelRatio).toDouble();
     final imagePngBytes = await _screenshotController.captureFromWidget(
-      image,
+      widget,
       pixelRatio: devicePixelRatio,
       context: context,
     );
-    CremeSharingPlatform.instance.shareToInstagramFeed(
-      image: base64Encode(imagePngBytes),
-    );
+    return await CremeSharingPlatform.instance
+        .shareToInstagramFeed(imageBytes: imagePngBytes);
   }
 
   Future<Uint8List> generateImageFromWidget({
@@ -149,15 +155,14 @@ class CremeSharing {
         stickerImage != null ? imagesPngBytes.first : null;
     final backgroundImagePngBytes =
         backgroundImage != null ? imagesPngBytes.last : null;
-    CremeSharingPlatform.instance.shareToInstagramStories(
+    return await shareToInstagramStories(
       backgroundTopColor: backgroundTopColor,
       backgroundBottomColor: backgroundBottomColor,
-      stickerImage: stickerImagePngBytes != null
-          ? base64Encode(stickerImagePngBytes)
-          : null,
-      backgroundVideo: backgroundVideo,
-      backgroundImage: backgroundImagePngBytes != null
-          ? base64Encode(backgroundImagePngBytes)
+      stickerImageBytes: stickerImagePngBytes,
+      backgroundVideoUrl: backgroundVideo,
+      backgroundImageBytes: backgroundImagePngBytes,
+      backgroundVideoBytes: Platform.isAndroid && backgroundVideo != null
+          ? await downloadFile(url: backgroundVideo)
           : null,
       contentURL: contentURL,
     );
@@ -195,9 +200,9 @@ class CremeSharing {
         '?w=${(devicePixelRatio * avatarSize.width).round()}'
         '&h=${(devicePixelRatio * avatarSize.width).round()}';
     final imageBytes = await Future.wait([
-      downloadImage(url: creatorAvatarUrlToDownload),
+      downloadFile(url: creatorAvatarUrlToDownload),
       if (!hasVideoOnBackground)
-        downloadImage(url: imageBackgroundUrlToDownload),
+        downloadFile(url: imageBackgroundUrlToDownload),
     ]);
     final stickerImagePngBytes = await _screenshotController.captureFromWidget(
       CreatorStickerWidget(
@@ -218,15 +223,16 @@ class CremeSharing {
       pixelRatio: devicePixelRatio,
       context: context,
     );
-    await shareToInstagramStories(
-      backgroundImage:
-          hasVideoOnBackground ? null : base64Encode(stickerImagePngBytes),
-      stickerImage:
-          hasVideoOnBackground ? base64Encode(stickerImagePngBytes) : null,
+    return await shareToInstagramStories(
       backgroundTopColor: backgroundColor,
       backgroundBottomColor: backgroundColor,
+      stickerImageBytes: hasVideoOnBackground ? stickerImagePngBytes : null,
+      backgroundVideoUrl: backgroundVideoUrl,
+      backgroundImageBytes: hasVideoOnBackground ? null : stickerImagePngBytes,
+      backgroundVideoBytes: Platform.isAndroid && backgroundVideoUrl != null
+          ? await downloadFile(url: backgroundVideoUrl)
+          : null,
       contentURL: contentURL,
-      backgroundVideo: backgroundVideoUrl,
     );
   }
 
@@ -275,13 +281,13 @@ class CremeSharing {
         '?w=${(devicePixelRatio * recipeImageSize.width).round()}'
         '&h=${(devicePixelRatio * recipeImageSize.width).round()}';
     final imageBytes = await Future.wait([
-      downloadImage(url: creatorAvatarUrlToDownload),
-      downloadImage(url: recipeImageUrlToDownload),
+      downloadFile(url: creatorAvatarUrlToDownload),
+      downloadFile(url: recipeImageUrlToDownload),
       if (!hasVideoOnBackground)
-        downloadImage(url: imageBackgroundUrlToDownload),
+        downloadFile(url: imageBackgroundUrlToDownload),
       ...List.of(extraRecipesToShow)
           .take(2)
-          .map<Future>((recipeData) => downloadImage(
+          .map<Future>((recipeData) => downloadFile(
                 url: '${recipeData.recipeImageUrl}'
                     '?w=${(devicePixelRatio * extraRecipesImageSize.width).round()}'
                     '&h=${(devicePixelRatio * extraRecipesImageSize.width).round()}',
@@ -322,15 +328,16 @@ class CremeSharing {
       pixelRatio: devicePixelRatio,
       context: context,
     );
-    await shareToInstagramStories(
-      backgroundImage:
-          hasVideoOnBackground ? null : base64Encode(stickerImagePngBytes),
-      stickerImage:
-          hasVideoOnBackground ? base64Encode(stickerImagePngBytes) : null,
+    return await shareToInstagramStories(
       backgroundTopColor: backgroundColor,
       backgroundBottomColor: backgroundColor,
+      stickerImageBytes: hasVideoOnBackground ? stickerImagePngBytes : null,
+      backgroundVideoUrl: backgroundVideoUrl,
+      backgroundImageBytes: hasVideoOnBackground ? null : stickerImagePngBytes,
+      backgroundVideoBytes: Platform.isAndroid && backgroundVideoUrl != null
+          ? await downloadFile(url: backgroundVideoUrl)
+          : null,
       contentURL: contentURL,
-      backgroundVideo: backgroundVideoUrl,
     );
   }
 
@@ -378,12 +385,12 @@ class CremeSharing {
             '&h=${(devicePixelRatio * avatarSize.width).round()}'
         : null;
     final imageBytes = await Future.wait([
-      downloadImage(url: creatorAvatarUrlToDownload),
-      downloadImage(url: cookedImageUrlToDownload),
+      downloadFile(url: creatorAvatarUrlToDownload),
+      downloadFile(url: cookedImageUrlToDownload),
       if (userAvatarUrlToDownload != null)
-        downloadImage(url: userAvatarUrlToDownload),
+        downloadFile(url: userAvatarUrlToDownload),
       if (!hasVideoOnBackground)
-        downloadImage(url: imageBackgroundUrlToDownload),
+        downloadFile(url: imageBackgroundUrlToDownload),
     ]);
     final stickerImagePngBytes = await _screenshotController.captureFromWidget(
       CookedStickerWidget(
@@ -411,19 +418,20 @@ class CremeSharing {
       pixelRatio: devicePixelRatio,
       context: context,
     );
-    await shareToInstagramStories(
-      backgroundImage:
-          hasVideoOnBackground ? null : base64Encode(stickerImagePngBytes),
-      stickerImage:
-          hasVideoOnBackground ? base64Encode(stickerImagePngBytes) : null,
+    return await shareToInstagramStories(
       backgroundTopColor: backgroundColor,
       backgroundBottomColor: backgroundColor,
+      stickerImageBytes: hasVideoOnBackground ? stickerImagePngBytes : null,
+      backgroundVideoUrl: backgroundVideoUrl,
+      backgroundImageBytes: hasVideoOnBackground ? null : stickerImagePngBytes,
+      backgroundVideoBytes: Platform.isAndroid && backgroundVideoUrl != null
+          ? await downloadFile(url: backgroundVideoUrl)
+          : null,
       contentURL: contentURL,
-      backgroundVideo: backgroundVideoUrl,
     );
   }
 
-  Future<Uint8List?> downloadImage({
+  Future<Uint8List?> downloadFile({
     required String url,
   }) async {
     try {

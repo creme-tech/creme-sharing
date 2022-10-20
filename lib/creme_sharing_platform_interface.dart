@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'dart:typed_data';
 
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
@@ -55,10 +56,11 @@ abstract class CremeSharingPlatform extends PlatformInterface {
   Future<void> shareToInstagramStories({
     Color? backgroundTopColor,
     Color? backgroundBottomColor,
-    String? stickerImage,
-    String? backgroundVideo,
-    String? backgroundImage,
+    Uint8List? stickerImageBytes,
+    String? backgroundVideoUrl,
+    Uint8List? backgroundImageBytes,
     String? contentURL,
+    Uint8List? backgroundVideoBytes,
   }) {
     throw UnimplementedError(
         'shareToInstagramStories() has not been implemented.');
@@ -69,8 +71,18 @@ abstract class CremeSharingPlatform extends PlatformInterface {
         'instagramIsAvailableToShareFeed() has not been implemented.');
   }
 
+  /// This method will share the [image] to the Instagram Feed:
+  ///
+  /// - **iOS**: the [image] parameter must be a [Uint8List] that will be
+  /// encoded as base64 and passed to native open and share on Instagram Feed
+  /// the image.
+  /// - **Android**: the [image] parameter must be a [Uint8List] that will be
+  /// saved locally as temporary file while you is sharing to Instagram Feed and
+  /// after the file will be deleted.
+  ///
+  /// More information at https://developers.facebook.com/docs/instagram/sharing-to-feed
   Future<void> shareToInstagramFeed({
-    required String image,
+    required Uint8List imageBytes,
   }) {
     throw UnimplementedError(
         'shareToInstagramFeed() has not been implemented.');
