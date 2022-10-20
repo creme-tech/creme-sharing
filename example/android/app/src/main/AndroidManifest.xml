@@ -1,10 +1,21 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="app.cre.me.sharing.creme_sharing_example">
+    package="app.cre.me.sharing.creme_sharing_example"
+    xmlns:tools="http://schemas.android.com/tools">
     <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <queries>
         <package android:name="com.instagram.android" />
         <package android:name="com.twitter.android" />
         <package android:name="com.whatsapp" />
+        <intent>
+            <action android:name='com.instagram.share.ADD_TO_STORY' />
+            <data android:mimeType='image/*' />
+        </intent>
+        <intent>
+            <action android:name='com.instagram.share.ADD_TO_STORY' />
+            <data android:mimeType='video/*' />
+        </intent>
     </queries>
    <application
         android:label="creme_sharing_example"
@@ -36,5 +47,13 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        <provider android:name="androidx.core.content.FileProvider"
+        android:authorities="app.cre.me.sharing.creme_sharing_example.social.share.fileprovider"
+        android:exported="false"
+        android:grantUriPermissions="true">
+        <meta-data
+            android:name="android.support.FILE_PROVIDER_PATHS"
+            android:resource="@xml/provider_paths"/>
+    </provider>    
     </application>
 </manifest>
