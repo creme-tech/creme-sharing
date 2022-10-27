@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -154,20 +155,21 @@ class CreatorStickerWidget extends StatelessWidget {
       );
     }
     final screenSize = MediaQuery.of(context).size;
-    final width = screenSize.width * 261 / 375;
+    final width =
+        Platform.isIOS ? screenSize.width * 261 / 375 : screenSize.width * 0.85;
     return Container(
       color: Colors.transparent,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(24),
         child: SizedBox(
-          height: width / 0.431,
+          height: Platform.isIOS ? width / 0.431 : null,
           width: width,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.max,
             children: [
-              const Spacer(),
+              if (Platform.isIOS) const Spacer(),
               SizedBox(
                 height: creatorAvatarSize.height,
                 width: creatorAvatarSize.width,
@@ -222,7 +224,7 @@ class CreatorStickerWidget extends StatelessWidget {
                   const Spacer(),
                 ],
               ),
-              const SizedBox(height: 32),
+              if (Platform.isIOS) const SizedBox(height: 32),
             ],
           ),
         ),
