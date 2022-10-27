@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -132,16 +133,18 @@ class _RecipeStickerToBackgroundVideoWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     if (extraRecipesToShow.length < 2) {
       final screenSize = MediaQuery.of(context).size;
-      final width = screenSize.width * 261 / 375;
+      final width = Platform.isIOS
+          ? screenSize.width * 261 / 375
+          : screenSize.width * 0.85;
       return SizedBox(
         width: width,
-        height: width / 0.431,
+        height: Platform.isIOS ? width / 0.431 : null,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Spacer(),
+            if (Platform.isIOS) const Spacer(),
             SizedBox(
               height: recipeImageSize.width,
               width: recipeImageSize.width,
@@ -215,21 +218,21 @@ class _RecipeStickerToBackgroundVideoWidget extends StatelessWidget {
                 const Spacer(),
               ],
             ),
-            const SizedBox(height: 32),
+            if (Platform.isIOS) const SizedBox(height: 32),
           ],
         ),
       );
     }
     const carouselSize = Size(315, 260);
     return SizedBox(
-      width: carouselSize.width,
-      height: carouselSize.width / 0.431,
+      width: Platform.isIOS ? carouselSize.width : carouselSize.width * 1.2,
+      height: Platform.isIOS ? carouselSize.width / 0.431 : null,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Spacer(),
+          if (Platform.isIOS) const Spacer(),
           SizedBox(
             width: carouselSize.width,
             height: carouselSize.height + 36,
@@ -348,7 +351,7 @@ class _RecipeStickerToBackgroundVideoWidget extends StatelessWidget {
               const Spacer(),
             ],
           ),
-          const SizedBox(height: 32),
+          if (Platform.isIOS) const SizedBox(height: 32),
         ],
       ),
     );
