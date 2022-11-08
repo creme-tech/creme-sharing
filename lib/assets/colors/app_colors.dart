@@ -23,5 +23,4 @@ class AppColors {
   static const red2 = Color(0xFFD3281F);
   static const red3 = Color(0xFFED4956);
   static const green = Color(0xFF93C36B);
-  static const avatarBackgroundColor = Colors.amber;
 }
