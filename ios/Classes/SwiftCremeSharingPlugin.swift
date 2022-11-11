@@ -63,7 +63,7 @@ public class SwiftCremeSharingPlugin: NSObject, FlutterPlugin {
       components.queryItems = [URLQueryItem(name: "message", value: message)]
       if let url = components.url, UIApplication.shared.canOpenURL(url) {
         if #available(iOS 10.0, *) {
-          UIApplication.shared.openURL(url)
+          UIApplication.shared.open(url)
           return result(nil)
         }
       } else {
@@ -72,16 +72,10 @@ public class SwiftCremeSharingPlugin: NSObject, FlutterPlugin {
     case "shareTextToWhatsapp":
       let arguments = (call.arguments as! [String: Any])
       let message = arguments["message"] as? String
-      let whatsMessage = "whatsapp://send?text=\(message!)"
-      var characterSet = CharacterSet.urlQueryAllowed
-      characterSet.insert(charactersIn: "?&")
-      let whatsAppURL = NSURL(
-        string: whatsMessage.addingPercentEncoding(withAllowedCharacters: characterSet)!)
-      if UIApplication.shared.canOpenURL(whatsAppURL! as URL) {
-        if #available(iOS 10.0, *) {
-          UIApplication.shared.openURL(whatsAppURL! as URL)
-          return result(nil)
-        }
+      var components = URLComponents(string: "whatsapp://send")!
+      components.queryItems = [URLQueryItem(name: "text", value: message)]
+      if let url = components.url, UIApplication.shared.canOpenURL(url) {
+        UIApplication.shared.open(url)
         return result(nil)
       } else {
         return result(nil)
