@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -239,37 +240,51 @@ class _RecipeStickerToBackgroundVideoWidget extends StatelessWidget {
             height: carouselSize.height + 36,
             child: Stack(
               alignment: Alignment.center,
+              clipBehavior: Clip.none,
               children: [
                 Align(
                   alignment: Alignment.centerLeft,
-                  child: SizedBox(
-                    height: extraRecipesImageSize.height + 16,
-                    width: extraRecipesImageSize.width,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(16),
-                      child: Image.memory(
-                        extraRecipesToShow[0].recipeImageBytes!,
+                  child: Transform.translate(
+                    offset: const Offset(6, 0),
+                    child: Transform.rotate(
+                      angle: -pi / 36,
+                      origin: const Offset(0, 0),
+                      child: SizedBox(
                         height: extraRecipesImageSize.height + 16,
                         width: extraRecipesImageSize.width,
-                        fit: BoxFit.cover,
-                        filterQuality: FilterQuality.high,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(16),
+                          child: Image.memory(
+                            extraRecipesToShow[0].recipeImageBytes!,
+                            height: extraRecipesImageSize.height + 16,
+                            width: extraRecipesImageSize.width,
+                            fit: BoxFit.cover,
+                            filterQuality: FilterQuality.high,
+                          ),
+                        ),
                       ),
                     ),
                   ),
                 ),
                 Align(
                   alignment: Alignment.centerRight,
-                  child: SizedBox(
-                    height: extraRecipesImageSize.height + 16,
-                    width: extraRecipesImageSize.width,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(16),
-                      child: Image.memory(
-                        extraRecipesToShow[1].recipeImageBytes!,
+                  child: Transform.translate(
+                    offset: const Offset(-6, 0),
+                    child: Transform.rotate(
+                      angle: pi / 36,
+                      child: SizedBox(
                         height: extraRecipesImageSize.height + 16,
                         width: extraRecipesImageSize.width,
-                        fit: BoxFit.cover,
-                        filterQuality: FilterQuality.high,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(16),
+                          child: Image.memory(
+                            extraRecipesToShow[1].recipeImageBytes!,
+                            height: extraRecipesImageSize.height + 16,
+                            width: extraRecipesImageSize.width,
+                            fit: BoxFit.cover,
+                            filterQuality: FilterQuality.high,
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -328,7 +343,7 @@ class _RecipeStickerToBackgroundVideoWidget extends StatelessWidget {
                 textScaleFactor ?? MediaQuery.of(context).textScaleFactor,
             overflow: TextOverflow.ellipsis,
           ),
-          const SizedBox(height: 98),
+          const SizedBox(height: 65),
           Row(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -587,34 +602,46 @@ class _RecipeStickerWithoutBackgroundVideoWidget extends StatelessWidget {
                     children: [
                       Align(
                         alignment: Alignment.centerLeft,
-                        child: SizedBox(
-                          height: extraRecipesImageSize.height,
-                          width: extraRecipesImageSize.width,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(16),
-                            child: Image.memory(
-                              extraRecipesToShow[0].recipeImageBytes!,
+                        child: Transform.translate(
+                          offset: const Offset(6, 0),
+                          child: Transform.rotate(
+                            angle: -pi / 36,
+                            child: SizedBox(
                               height: extraRecipesImageSize.height,
                               width: extraRecipesImageSize.width,
-                              fit: BoxFit.cover,
-                              filterQuality: FilterQuality.high,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(16),
+                                child: Image.memory(
+                                  extraRecipesToShow[0].recipeImageBytes!,
+                                  height: extraRecipesImageSize.height,
+                                  width: extraRecipesImageSize.width,
+                                  fit: BoxFit.cover,
+                                  filterQuality: FilterQuality.high,
+                                ),
+                              ),
                             ),
                           ),
                         ),
                       ),
                       Align(
                         alignment: Alignment.centerRight,
-                        child: SizedBox(
-                          height: extraRecipesImageSize.height,
-                          width: extraRecipesImageSize.width,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(16),
-                            child: Image.memory(
-                              extraRecipesToShow[1].recipeImageBytes!,
+                        child: Transform.translate(
+                          offset: const Offset(-6, 0),
+                          child: Transform.rotate(
+                            angle: pi / 36,
+                            child: SizedBox(
                               height: extraRecipesImageSize.height,
                               width: extraRecipesImageSize.width,
-                              fit: BoxFit.cover,
-                              filterQuality: FilterQuality.high,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(16),
+                                child: Image.memory(
+                                  extraRecipesToShow[1].recipeImageBytes!,
+                                  height: extraRecipesImageSize.height,
+                                  width: extraRecipesImageSize.width,
+                                  fit: BoxFit.cover,
+                                  filterQuality: FilterQuality.high,
+                                ),
+                              ),
                             ),
                           ),
                         ),
@@ -674,7 +701,7 @@ class _RecipeStickerWithoutBackgroundVideoWidget extends StatelessWidget {
                       textScaleFactor ?? MediaQuery.of(context).textScaleFactor,
                   overflow: TextOverflow.ellipsis,
                 ),
-                const SizedBox(height: 83),
+                const SizedBox(height: 65),
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
