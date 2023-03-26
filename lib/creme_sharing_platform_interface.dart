@@ -54,6 +54,7 @@ abstract class CremeSharingPlatform extends PlatformInterface {
   }
 
   Future<void> shareToInstagramStories({
+    required String appId,
     Color? backgroundTopColor,
     Color? backgroundBottomColor,
     Uint8List? stickerImageBytes,

@@ -70,12 +70,13 @@ class CremeSharingPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
                 val backgroundAssetType = call.argument<String>("backgroundAssetType")
                 val topBackgroundColor = call.argument<String>("topBackgroundColor")
                 val bottomBackgroundColor = call.argument<String>("bottomBackgroundColor")
-                val sourceApplication = call.argument<String?>("sourceApplication")
+                val sourceApplication = call.argument<String>("sourceApplication")
                 val interactiveAssetPath = call.argument<String?>("interactiveAssetPath")
                 if (backgroundAssetPath != null
                     && backgroundAssetType != null
                     && topBackgroundColor != null
                     && bottomBackgroundColor != null
+                    && sourceApplication != null
                 ) {
                     shareToInstagramStories(
                         backgroundAssetPath = backgroundAssetPath,
@@ -161,7 +162,7 @@ class CremeSharingPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
         backgroundAssetType: String,
         topBackgroundColor: String,
         bottomBackgroundColor: String,
-        sourceApplication: String?,
+        sourceApplication: String,
         interactiveAssetPath: String?,
         result: Result,
     ) {
