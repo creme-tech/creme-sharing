@@ -94,9 +94,10 @@ public class SwiftCremeSharingPlugin: NSObject, FlutterPlugin {
         return result(nil)
       }
     case "shareToInstagramStories":
-      if let storiesUrl = URL(string: "instagram-stories://share") {
+        let arguments = (call.arguments as! [String: Any])
+        let appId = arguments["appId"] as? String
+        if let storiesUrl = URL(string: "instagram-stories://share?source_application=\(appId ?? "")") {
         if UIApplication.shared.canOpenURL(storiesUrl) {
-          let arguments = (call.arguments as! [String: Any])
           let backgroundTopColor = arguments["backgroundTopColor"] as? String
           let backgroundBottomColor = arguments["backgroundBottomColor"] as? String
           let stickerImage = arguments["stickerImage"] as? String
@@ -123,6 +124,9 @@ public class SwiftCremeSharingPlugin: NSObject, FlutterPlugin {
           if let backgroundVideo = getVideoData(source: backgroundVideo) {
             pasteboardItems["com.instagram.sharedSticker.backgroundVideo"] = backgroundVideo
           }
+        if let appId = appId {
+          pasteboardItems["com.instagram.sharedSticker.appID"] = appId
+        }
           if #available(iOS 10.0, *) {
             let pasteboardOptions = [
               UIPasteboard.OptionsKey.expirationDate: Date().addingTimeInterval(300)

@@ -63,6 +63,7 @@ class MethodChannelCremeSharing extends CremeSharingPlatform {
   /// More information at https://developers.facebook.com/docs/instagram/sharing-to-feed
   @override
   Future<void> shareToInstagramStories({
+    required String appId,
     Color? backgroundTopColor,
     Color? backgroundBottomColor,
     Uint8List? stickerImageBytes,
@@ -70,7 +71,6 @@ class MethodChannelCremeSharing extends CremeSharingPlatform {
     Uint8List? backgroundImageBytes,
     String? contentURL,
     Uint8List? backgroundVideoBytes,
-    String? appId,
   }) async {
     if (Platform.isIOS) {
       return await methodChannel.invokeMethod(
@@ -157,6 +157,7 @@ class MethodChannelCremeSharing extends CremeSharingPlatform {
     }
 
     return super.shareToInstagramStories(
+      appId: appId,
       contentURL: contentURL,
       backgroundTopColor: backgroundTopColor,
       backgroundBottomColor: backgroundBottomColor,

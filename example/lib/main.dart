@@ -159,6 +159,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           });
                         });
                         await cremeSharing.shareCreatorToInstagramStories(
+                          appId: '',
                           backgroundVideoUrl: generateWithBackgroundVideo
                               ? backgroundVideoUrl
                               : null,
@@ -192,6 +193,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           });
                         });
                         await cremeSharing.shareRecipesToInstagramStories(
+                          appId: '',
                           creatorTag: 'Mixologist',
                           extraRecipesToShow: [],
                           backgroundVideoUrl: generateWithBackgroundVideo
@@ -230,6 +232,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           });
                         });
                         await cremeSharing.shareRecipesToInstagramStories(
+                          appId: '',
                           creatorTag: 'Mixologist',
                           extraRecipesToShow: [
                             const RecipeData(
@@ -281,6 +284,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           });
                         });
                         await cremeSharing.shareCookedToInstagramStories(
+                          appId: '',
                           backgroundVideoUrl: generateWithBackgroundVideo
                               ? backgroundVideoUrl
                               : null,

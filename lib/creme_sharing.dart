@@ -56,6 +56,7 @@ class CremeSharing {
   /// - [contentURL] : it will be a string (that don't work because the app need to be a partner of Instagram)
   /// but in the Android will be implemented (WIP)
   Future<void> shareToInstagramStories({
+    required String appId,
     Color? backgroundTopColor,
     Color? backgroundBottomColor,
     Uint8List? stickerImageBytes,
@@ -65,6 +66,7 @@ class CremeSharing {
     Uint8List? backgroundVideoBytes,
   }) =>
       CremeSharingPlatform.instance.shareToInstagramStories(
+        appId: appId,
         backgroundTopColor: backgroundTopColor,
         backgroundBottomColor: backgroundBottomColor,
         stickerImageBytes: stickerImageBytes,
@@ -134,6 +136,7 @@ class CremeSharing {
     Widget? backgroundImage,
     String? contentURL,
     required BuildContext context,
+    required String appId,
   }) async {
     final devicePixelRatio =
         max(3, MediaQuery.of(context).devicePixelRatio).toDouble();
@@ -156,6 +159,7 @@ class CremeSharing {
     final backgroundImagePngBytes =
         backgroundImage != null ? imagesPngBytes.last : null;
     return await shareToInstagramStories(
+      appId: appId,
       backgroundTopColor: backgroundTopColor,
       backgroundBottomColor: backgroundBottomColor,
       stickerImageBytes: stickerImagePngBytes,
@@ -179,6 +183,7 @@ class CremeSharing {
     required String creatorTag,
     required BuildContext context,
     required String? backgroundVideoUrl,
+    required String appId,
     Color backgroundColor = Colors.grey,
     double textScaleFactor = 1,
     String? contentURL,
@@ -224,6 +229,7 @@ class CremeSharing {
       context: context,
     );
     return await shareToInstagramStories(
+      appId: appId,
       backgroundTopColor: backgroundColor,
       backgroundBottomColor: backgroundColor,
       stickerImageBytes: hasVideoOnBackground ? stickerImagePngBytes : null,
@@ -254,6 +260,7 @@ class CremeSharing {
     required BuildContext context,
     required String? backgroundVideoUrl,
     required List<RecipeData> extraRecipesToShow,
+    required String appId,
     Color backgroundColor = Colors.grey,
     double textScaleFactor = 1,
     String? contentURL,
@@ -329,6 +336,7 @@ class CremeSharing {
       context: context,
     );
     return await shareToInstagramStories(
+      appId: appId,
       backgroundTopColor: backgroundColor,
       backgroundBottomColor: backgroundColor,
       stickerImageBytes: hasVideoOnBackground ? stickerImagePngBytes : null,
@@ -348,6 +356,7 @@ class CremeSharing {
   /// if that's not null else will be render [creatorAvatarUrl] as background image
   Future<void> shareCookedToInstagramStories({
     required String userName,
+    required String appId,
     required String? userAvatarUrl,
     required String cookedImageUrl,
     required String creatorAvatarUrl,
@@ -419,6 +428,7 @@ class CremeSharing {
       context: context,
     );
     return await shareToInstagramStories(
+      appId: appId,
       backgroundTopColor: backgroundColor,
       backgroundBottomColor: backgroundColor,
       stickerImageBytes: hasVideoOnBackground ? stickerImagePngBytes : null,
