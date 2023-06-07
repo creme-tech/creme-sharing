@@ -4,18 +4,14 @@ version: 0.0.15
 homepage:
 
 environment:
-  sdk: ">=2.17.5 <3.0.0"
-  flutter: ">=2.5.0"
+  sdk: ">=2.17.0 <4.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
   plugin_platform_interface: ^2.0.2
   path_provider: ^2.0.2
-  screenshot:
-    git:
-      url: https://github.com/SachinGanesh/screenshot.git
-      ref: "df14c5ccd52fcb5ccb568a0043419c9850438257"
+  screenshot: ^2.1.0
   flutter_svg: ^1.1.1+1
 
 dev_dependencies:
