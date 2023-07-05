@@ -4,15 +4,15 @@ version: 0.0.16
 homepage:
 
 environment:
-  sdk: ">=2.17.0 <4.0.0"
+  sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  plugin_platform_interface: ^2.0.2
-  path_provider: ^2.0.2
+  plugin_platform_interface: ^2.1.4
+  path_provider: ^2.0.15
   screenshot: ^2.1.0
-  flutter_svg: ^1.1.1+1
+  flutter_svg: ^2.0.7
 
 dev_dependencies:
   flutter_test:
