@@ -53,6 +53,12 @@ abstract class CremeSharingPlatform extends PlatformInterface {
     throw UnimplementedError('shareTextToWhatsapp() has not been implemented.');
   }
 
+  Future<void> shareTextToInstagramDirect({
+    String? text,
+  }) {
+    throw UnimplementedError('shareTextToWhatsapp() has not been implemented.');
+  }
+
   Future<void> shareToInstagramStories({
     required String appId,
     Color? backgroundTopColor,

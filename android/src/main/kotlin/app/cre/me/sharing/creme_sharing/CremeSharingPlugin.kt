@@ -100,6 +100,11 @@ class CremeSharingPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
             "instagramIsAvailableToShare" -> {
                 result.success(appIsAvailableToShare("com.instagram.android"))
             }
+            "shareTextToInstagramDirect" -> {
+                val text = call.argument<String?>("message")
+                shareTextToInstagramDirect(text)
+                result.success(null)
+            }
             "shareTextToWhatsapp" -> {
                 val text = call.argument<String?>("message")
                 shareTextToWhatsapp(text)
@@ -225,6 +230,14 @@ class CremeSharingPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
         whatsappIntent.type = "text/plain"
         whatsappIntent.`package` = "com.whatsapp"
         activity?.startActivity(whatsappIntent)
+    }
+
+    private fun shareTextToInstagramDirect(text: String?) {
+        val instagramIntent = Intent(Intent.ACTION_SEND)
+        instagramIntent.putExtra(Intent.EXTRA_TEXT, text)
+        instagramIntent.type = "text/plain"
+        instagramIntent.`package` = "com.instagram.android"
+        activity?.startActivity(instagramIntent)
     }
 
     private fun appIsAvailableToShare(packageName: String): Boolean {
