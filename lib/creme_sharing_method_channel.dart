@@ -42,6 +42,15 @@ class MethodChannelCremeSharing extends CremeSharingPlatform {
   }
 
   @override
+  Future<void> shareTextToInstagramDirect({String? text}) async {
+    if (Platform.isAndroid) {
+      return await methodChannel.invokeMethod('shareTextToInstagramDirect', {
+        'message': text,
+      });
+    }
+  }
+
+  @override
   Future<void> shareTextToWhatsapp({String? text}) async {
     return await methodChannel.invokeMethod(
       'shareTextToWhatsapp',

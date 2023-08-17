@@ -30,6 +30,11 @@ class CremeSharing {
   Future<void> shareTextToWhatsapp({String? text}) =>
       CremeSharingPlatform.instance.shareTextToWhatsapp(text: text);
 
+  /// This method shares text to instagram direct
+  /// *** ANDROID ONLY ***
+  Future<void> shareTextToInstagramDirect({String? text}) =>
+      CremeSharingPlatform.instance.shareTextToInstagramDirect(text: text);
+
   /// This method will check is the user have the twitter available to share
   Future<bool> twitterIsAvailableToShare() =>
       CremeSharingPlatform.instance.twitterIsAvailableToShare();

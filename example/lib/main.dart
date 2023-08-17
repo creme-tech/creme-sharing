@@ -123,6 +123,28 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
           ),
+          SliverToBoxAdapter(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Text(
+                    "Can share instagram direct: $instagramIsAvailableToShare",
+                    style: const TextStyle(color: Colors.black),
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () async {
+                    await cremeSharing.shareTextToInstagramDirect(
+                      text:
+                          "Check out Salsa Macha by Luana Sabino & Eduardo Ortiz CREME! https://cremetech.page.link/NWN4",
+                    );
+                  },
+                  child: const Text('share text to instagram'),
+                ),
+              ],
+            ),
+          ),
           if (instagramIsAvailableToShare == null || loading)
             const SliverFillRemaining(
               child: Center(child: CircularProgressIndicator()),
