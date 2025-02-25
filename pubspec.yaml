@@ -1,6 +1,6 @@
 name: creme_sharing
 description: Flutter plugin to run all creme sharing routines.
-version: 0.0.19
+version: 0.0.20
 homepage:
 
 environment:
@@ -10,9 +10,9 @@ dependencies:
   flutter:
     sdk: flutter
   plugin_platform_interface: ^2.1.8
-  path_provider: ^2.1.3
+  path_provider: ^2.1.5
   screenshot: ^3.0.0
-  flutter_svg: ^2.0.10+1
+  flutter_svg: ^2.0.17
 
 dev_dependencies:
   flutter_test:
